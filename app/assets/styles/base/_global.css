@@ -1,0 +1,13 @@
+/*Targeting the body element*/
+
+body {
+	font-family: 'Roboto', sans-serif;
+	color: #333;
+}
+
+/*Targeting all image elements with a max-width and a height to auto*/
+
+img {
+	max-width: 100%;
+	height: auto;
+}
