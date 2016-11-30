@@ -11,3 +11,9 @@ img {
 	max-width: 100%;
 	height: auto;
 }
+
+/*Targeting and selectind every single element on the page*/
+
+* {
+	box-sizing: border-box;
+}

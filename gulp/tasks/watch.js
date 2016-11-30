@@ -51,7 +51,7 @@ gulp.task('watch', function() {
 	// and we pipe it into browserSync with the stream() method
 	//.pipe(browserSync.stream());
 
-	// and because that line of Code starts with gulp.src which a Asynchronous function
+	// and because that line of Code starts with gulp.src which  is a Asynchronous function
 	// let's make sure to begin with return 
 
 gulp.task('cssInject', ['styles'], function() {

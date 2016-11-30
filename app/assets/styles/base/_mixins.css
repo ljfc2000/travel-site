@@ -1,0 +1,35 @@
+/*Defining our mixin by giving it a name atSmall
+  then we declare our media query selecting only
+  screens that are 530px or larger*/
+@define-mixin atSmall {
+	@media (min-width: 530px) {
+		@mixin-content;
+	}
+
+}
+
+/*Defining another mixin for Medium screens*/
+@define-mixin atMedium {
+	@media (min-width: 800px) {
+		@mixin-content;
+	}
+}
+
+
+/*Defining another mixin for Large screens*/
+@define-mixin atLarge {
+	@media (min-width: 1200px) {
+		@mixin-content;
+	}
+}
+
+/*Defining another mixin for clearing floats*/
+@define-mixin clearfix {
+		&::after {
+			content:"";
+			clear: both;
+			display: table;
+		}
+
+}
+
