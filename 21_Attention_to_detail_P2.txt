@@ -1,0 +1,3 @@
+Overview
+********
+In part 2, we will fine tune the 2nd column of Text, typography.

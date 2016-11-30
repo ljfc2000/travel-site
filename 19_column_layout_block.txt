@@ -1,0 +1,245 @@
+Overview
+********
+We are going to build a reusable block that we can use to create a Column layout throughout our page.
+
+Creating a 2 Column Layout
+==========================
+We want to place some Text content next to an Image, so what those 2 columns belong to? They belong to a Row!! So basically if we were thinking about a spreadsheet, we would have a column A and a column B grouped together in a ROW.
+So in our HTML let's wrapped these 2 contents in a <div> with a class= "Row". Let's find the contents in our HTML, Ctrl + F " how we got started", then let's create our <div class="row"> and indent all that content.
+Next we'll create a new CSS file inside our 'modules' folder named "_row.css", and create a new class '.row'.
+Let's import that new class in our 'styles/styles.css' : @import "modules/_row";
+
+Next let's wrap each section of content (image and Text) we want to be a column, in their own <div>.
+So in our HTML underneath <div class="row"> let's create 2 new <div>(s).
+Let's cut and paste the image in its own <div>, and let's cut and paste the Text in the 2nd <div>.
+So now the question is what should the class name be for those 2 brand new <div>?
+We know that both belong to the 'row' block, so they should start with that word 'row__'....but let's take a look at the Designe File, and why don't we think of our Row, as a 12 column Grid? And we can see our image is taking about 1/3rd of the Row; and what is 1/3rd of 12? The answer is 4. The other column where will reside the Text, is taking about 2/3rd of the width; and what is 2/3rd of 12? The answer is 8.
+
+So we can call that 2 column Layout, a 'FourEight Split'. So we can name our first class name: 
+
+	<div class="row__4">
+
+and our 2nd class name: 
+
+	<div class="row__8">
+
+Then let's jump into our '_row.css' file and finish creating and writing '.row' class, to make our columns come to life: 
+
+	.row {
+
+		&__4 {
+			float: left;
+			width: 33.33%;               <-- Open our calculator, if we think of our available width as 100% and 
+			                                 then divide that up among our 12 column grid (100/12= 8.3333...) that means each of our 12 grid bars is 8.3% . So for this &__4 we multiply it (4 * 8.333=33.3333) which makes sense since we knew that it was taking 1/3rd of the grid.
+		                                 
+		}                              
+
+        &__8 {
+        	float: left;
+        	width: 66.66%;
+        }
+
+	}
+
+	Let's save that file and check in the browser; Well we see that the image and the Text are side by side, but we also see a problem with the blue background 'Our Features'section that has moved up, and is now sitting behind our content.
+	This, is because we forgot to clear our "floats". When we float an element, we take it out of the normal flow of the page, and in this instance, our <div class="row"> has 2 direct children, the 2 columns <div class="row__4"> 
+	and <div class="row__8">, and if both of those elements have been taken out of the flow of the page, it's almost if our main row <div> has No Idea how Tall it should Be. 
+	Because as far as it's concerned, in terms of Sizing and Styling, it thinks that it's EMPTY.
+
+	
+So how do we Clear our 'floats'?
+================================
+Back in our CSS file, up of the top of this '.row' rule, let's create a new selector, and we can say:
+
+	&:: after {                    
+		content: "";                           <-- To create a pseudo or a bit of fake content with CSS
+		clear: both;                               and let's tell this empty fake space to be set to clear both
+		display: table;                            and for a bit of added browser support we say display: table;
+	}                                              
+
+So this CSS selector, will add this blank space "content: '';" after all of the content in the main '.row' <div>, in other words it will create that fake content right where we used to have our empty <div>...
+So if we go ahead and save this file, and check in the browser, we see that our floats are cleared and we got to keep our HTML clean.
+
+Let's clean up a little bit, this code that we used to clear the 'floats' should probably be moved into a @mixin, so we can easily reuse this code whenever we want, so let's cut that code and go ahead in 'base/_mixin.css', let's 
+at the bottom of the file, define a new @mixin named 'clearfix' and paste our code. 
+
+	@define-mixin clearfix {
+		&::after {
+			content:"";
+			clear: both;
+			display: table;
+		}
+
+	}
+
+And back in our '_row.css' let's say: @mixin clearfix; and check in the browser. Looking Good!! 
+
+But now the problem here is, the 2 columns bumps to each other :(!! It would look better with a margin between the 2. And if we look at the Design File, there is indeed a margin.
+So the way to handle this issue, is just by adding in our HTML file, a modifier class to our main 'row' <div> named 'row--gutters': 
+
+	<div class="row row--gutters">
+
+Next let's write a bit of CSS, so if this modifier class 'row--gutters' is used, a bit of horizontal padding will be added to all of the columns and that will create the margin or gutters effect that we are looking for.
+So back in our '_row.css', let's create a new rule with that 'gutters' modifier. But we don't want to select or style the actual parent row <div> , we want to select all of its direct children or in other words all of the columns. So we use the greater than symbol (>) to select all direct children that use a Tag of <div> and then just say padding-right: 65px;
+
+	&--gutters > div {
+		padding-right: 65px;
+	}
+
+Let's check the browser, and we can see that our column layout Broke!! Our second column is getting pushed to a 2nd line, and this is because the padding-right: 65px; upsets the arithmetics that we set up earlier:
+
+	width: 33.33%;
+	width: 66.66%;
+We cannot let the combined width of our columns be more than 100%, otherwise they won't be able to fit on a single line. By Default Web browsers calculate the True width of an element by taking the declared width and then add any padding or borders so : 
+
+	(33.33 + 66.66 + 65 + 65) = is more than 100% or the available horizontal space!! 
+
+However we can change the way how Web browsers calculate the True width of elements if we add "box-sizing: border-box;" the web browsers will honor the declared width values: width: 33.33%; and width: 66.66%; and then the padding-right will still be applied, but won't have any effect on the calculated width value. So we save the file and check in the browser; We should be back in business!
+
+.row {
+
+	@mixin clearfix; 
+
+	&--gutters > div {
+		padding-right: 65px;
+		box-sizing: border-box;
+	}
+
+	&__4 {
+		float: left;
+		width: 33.33%;
+	}
+
+ 	&__8 {
+ 		float: left;
+ 		width: 66.66%;
+ 	}
+
+
+}
+	
+However in recent years what a lot of developers have been doing, is applying that "box-sizing: border-box;" globally to all elements on the page. So in our case what we would do is, we'd delete that line and cut it, then within app/assets/styles/base folder we would open the '_global.css' file and add it this way by creating a new rule, where the selector is the * or asterix, meaning that we want to select any single element on the page: 
+
+/*Targeting the body element*/
+
+body {
+	font-family: 'Roboto', sans-serif;
+	color: #333;
+}
+
+/*Targeting all image elements with a max-width and a height to auto*/
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+/*Targeting and selectind every single element on the page*/
+
+* {
+	box-sizing: border-box;
+}
+
+Then we save the file and check in the browser; with that in place managing our Width values just got a lot easier now.
+When we set that property just Once in our '_global.css' file and we can forget about it, at this point our column layout is shapping up nicely.
+
+
+Now there's a couple of things that we still want to fine tune....Like if we made our '.row' class with a yellow background, we'd notice 2 margins or gutters between our 2 columns. One that we need between the image and the Text and that one is fine, however the one on the far right edge, we do not need it because that's a waste of space. We created those margins with that 'padding-right: 65px;' to each column. So if we had a row with 3 or 4 columns, there would be automatically a gutter between each of them right?
+
+So the question is: How do we remove that final gutter on the end? 
+Our first instinct would be to select our last column in the row and tell it to have 0 padding! But doing that would affect the ratio of our columns. Currently the first column is 1/3rd and the second one 2/3rd of the width, but by removing that final gutter would mean that our second column is no longer 2/3rd of the width.
+
+So to handle that issue, we can counter act that 'padding-right: 65px' by selecting the main parent '.row' with the modifier class of gutters '&--gutters' and giving it a negative right margin that matches the 'padding-right' value. 
+
+.row {
+
+	@mixin clearfix; 
+
+	&--gutters {
+		margin-right: 65px;
+	}
+
+	&--gutters > div {
+		padding-right: 65px;
+		box-sizing: border-box;
+	}
+
+	&__4 {
+		float: left;
+		width: 33.33%;
+	}
+
+ 	&__8 {
+ 		float: left;
+ 		width: 66.66%;
+ 	}
+
+
+}
+
+After saving the file, and checking in the browser, the 2nd column still has the gutter that we want to get rid of, however the negative 'margin-right: 65px;' as made the row in general, 65px wider than it should be. What does that mean? The row is supposed to be constrained by the width of our 'wrapper' <div>, so for example if we open '_wrapper.css' file and give it a background-color of green, we could see that the 'yellow color' of our row is protruding (depasse) outside the right edge of the wrapper, and this is due to the negative margin. 
+Now within '_wrapper.css' we could simply say 'overflow: hidden;' and save the file and check. The negative margin still exists, but we said the wrapper to overflow: hidden; we can't see it anymore and now we have a very clean column layout.
+
+.wrapper {
+	overflow: hidden;
+	padding-left: 18px;
+	padding-right: 18px;
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+
+	&--medium {
+		max-width: 976px;
+	}
+
+	.wrapper {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+}
+
+
+Now let's check the layout on a small screen, ansd we can see that the layout in Odd!! There's just not enough horizontal space for multiple columns to sit side by side. So let's adjust this, so small screens use a single column layout instead. On small screens we want to use for each section the full available width, and simply stack on top of each other vertically. But we still want to maintain the multiple column layout on larger screens.
+
+So over in our HTML, let's adjust the class names of our column elements. So for example, we don't want our first column element <div class="row__4" to use 4 of our 12 grid bars, for all screen sizes, on a small screen we want that element to use the full horizontal width. So let's do this, let's adjust the name by calling it 
+<div class="row__medium-4", and this way we will adjust our CSS to use @media queries only if the screen is considered to be medium or larger, we will apply the width and the float to the left. Of course we do the same thing for the 2nd column as well....
+
+Then over our '_row.css' file, let's just change the name of our 2 rules and wrapp them in a @media query
+
+@mixin clearfix; 
+
+	&--gutters {
+		margin-right: -65px;
+	}
+
+	&--gutters > div {
+		padding-right: 65px;
+		box-sizing: border-box;
+	}
+
+	@mixin atMedium {
+		&__medium-4 {
+		float: left;
+		width: 33.33%;
+		}
+
+ 	&__medium-8 {
+ 		float: left;
+ 		width: 66.66%;
+ 		}
+
+	}
+
+
+We save the file and check in the browser.
+
+
+
+
+
+
+
+
+
+
