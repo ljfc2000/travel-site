@@ -17,3 +17,10 @@ img {
 * {
 	box-sizing: border-box;
 }
+
+
+/*Targeting all the links on the page*/
+
+a {
+	color: $mainOrange;
+}
