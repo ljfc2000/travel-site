@@ -1,0 +1,244 @@
+What is Gulp?
+*************
+Gulp is what we call:
+	-A build system
+	-A build tool
+	-A task runner
+Gulp makes it easier to automate development tasks. Gulp is at the heart of Automation.
+We can think of Gulp as a record player and Gulp plugins are the records.
+There is a gulp plugin to automate almost any task we can think of.
+
+Installing Gulp
+***************
+There are 2 steps to install Gulp:
+
+Step #1: Install Gulp globally
+If we type in our cmd line "~ gulp" the cmd line response might be "command not found" or "unknown command", then if we install Gulp globally, the cmd line will know what Gulp is. That's why we need to type in the following cmd to install it globally:
+
+~ npm install gulp-cli --global
+
+Output:
+C:\Users\pc\AppData\Roaming\npm\gulp -> C:\Users\pc\AppData\Roaming\npm\node_mod                                   ules\gulp-cli\bin\gulp.js
+C:\Users\pc\AppData\Roaming\npm
+`-- gulp-cli@1.2.2
+
+So what we just did is, when we use "npm install" and the name of the package, Node would go out to the Internet and download the package files into our "node_modules" folder, but since we used the "--global" Node installed those packages into a more universal location on our computer hard drive, and therefore now we have Global access to gulp commands.
+
+Eventhough we just installed Gulp, if we retype in "gulp" in our cmd line we get an ERROR MESSAGE:
+
+$ gulp
+[15:26:48] Local gulp not found in ~
+[15:26:48] Try running: npm install gulp
+
+but that's a good sign that we see it, that means that we have gulp installed. Now if you type in:
+
+$ gulp -v
+[15:30:03] CLI version 1.2.2
+
+that means that we are in Business, and good to Go! On Mac systems run the following cmd if you are still seeing command not found:
+
+sudo npm install gulp-cli --global
+
+Step #2: Install Gulp in the project we are working on:
+*******************************************************
+First thing we do is to point out our command line towards our Project Directory, and we want to install gulp in our "package.json" file and to do that we type in the following cmd:
+
+~ npm install gulp --save-dev
+
+Then open the "package.json" file, and we should see a new area like this:
+
+"devDependencies": {                   <--- These are packages needed by our Website to Run in the browser
+    "gulp": "^3.9.1"
+  }
+
+Previously, when we installed packages with: 
+
+~ npm install package-name --save
+
+They were installed in that other "dependencies" area:
+
+ "dependencies": {
+    "jquery": "^3.1.1",
+    "normalize.css": "^5.0.0"          <--- These are packages designated to make our life easier as Developers
+  }
+
+
+Now if we type in gulp inside our "travel-site" project we should see that other ERROR message:
+
+$ gulp
+[15:45:59] No gulpfile found
+
+This is NORMAL, that confirms that we have installed "Gulp globally and Localy"
+
+Hands-On with Gulp:
+*******************
+First thing that we need to do is creating a brand new JavaScript File, in which we'll tell Gulp what to do. And let's name it "gulpfile.js".
+So either from the cmd line with the "touch"command, or from the text editor.
+
+Now the first thing that we want to do is to import, or require the "gulp" package that we installed, and import the gulp library from it into our gulpfile.js in order to have all the functionalities at our disposal.
+So we create a variable and require the gulp package by typing in: 
+
+var gulp = require('gulp');
+
+Next if we type in our cmd line, We should get another ERROR message: :
+
+~ gulp 
+
+[16:02:35] Using gulpfile ~\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site\gulpfile.js
+[16:02:35] Task 'default' is not in your gulpfile
+[16:02:35] Please check the documentation for proper gulpfile formatting
+
+
+So everything in 'gulp' revolves around TASKS, so when we RUN the'gulp'command, it's expecting us to have defined a 
+DEFAULT TASK, in our 'gulpfile.js' file.
+
+var gulp = require('gulp');
+// Defining our default task, with the gulp var calling the task() method
+// Passing 2 arguments (taskName, taskFunction )
+// And what we want to do is log out to the console a little bit of Text
+
+gulp.task('default', function() {
+	console.log("Hooray - You created a Gulp task.");
+} );
+
+Run it in the command line and we see that Gulp Runs our Default Task:
+
+$ gulp
+[16:14:53] Using gulpfile ~\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site\gulpfile.js
+[16:14:53] Starting 'default'...
+Hooray - You created a Gulp task.
+[16:14:53] Finished 'default' after 268 μs
+
+
+Let's create another TASK:
+
+// Creating another Task named html
+
+gulp.task('html', function() {
+	console.log("Imagine something useful being done to your HTML here.");
+});
+
+To run the DEFAULT task we just RUN 'gulp', but we also can RUN specific tasks with the name of the task:
+
+$ gulp html
+[16:25:23] Using gulpfile ~\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site\gulpfile.js
+[16:25:23] Starting 'html'...
+Imagine something useful being done to your HTML here.
+[16:25:23] Finished 'html' after 241 μs
+
+Right now, Gulp by itself is not really USEFUL, but remember that Gulp becomes Interesting when ADDING Gulp plugins.
+So our first Gulp plugin will be "gulp-watch", that's the plugin that makes Automation Possible.
+This plugin can watch specific Files on our Computer, and when it detects some saved changes to our Files, it can 
+Trigger a Gulp Task in Response. 
+
+Note: Make Sure to Remove EVERY Anti-Malware Software if you have any on your Machine!! 
+*****
+
+Let's set it Up with the following command:
+
+~ npm install gulp-watch --save-dev
+
+And then let's write some Code for our 'watch' Task:
+*****************************************************
+
+// Defining our default task, with the gulp var calling the task() method
+var gulp = require('gulp'),
+// Defining our Gulp watch variable requiring the gulp-watch package
+// We can avoid to Declare var each time now, just add a coma! 
+watch = require('gulp-watch');
+
+// Passing 2 arguments (taskName, taskFunction )
+// And what we want to do is log out to the console a little of Text
+
+gulp.task('default', function() {
+	console.log("Hooray - You created a Gulp task.");
+} );
+
+// Creating another Task named html
+gulp.task('html', function() {
+	console.log("Imagine something useful being done to your HTML here.");
+});
+
+// Creating another Task named watch
+gulp.task('watch', function() {
+	// Passing the watch() 2 arguments: 1.File we want to watch, 2.Action we want to do with it
+	// And whenever we make a change to index.html, it Triggers our html Task
+	watch('./app/index.html', function() {
+		gulp.start('html'); // html is tha name of the Task we want to Start.
+	} );
+});
+
+Back in the command Line type in: 
+*********************************
+
+~ gulp watch
+
+[17:31:15] Using gulpfile ~\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site\gulpfile.js
+[17:31:15] Starting 'watch'...
+[17:31:15] Finished 'watch' after 109 ms
+
+
+A "gulp watch" Task doesn't End until we tell it to End! So it's running Silently in the background until we make some saved changes.
+So let's Open "index.html" and make some changes, and see what happens in the cmd Line:
+
+$ gulp watch
+[18:11:29] Using gulpfile ~\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site\gulpfile.js
+[18:11:29] Starting 'watch'...
+[18:11:29] Finished 'watch' after 8.25 ms
+[18:11:36] Starting 'html'...
+Imagine something useful being done to your HTML here.
+[18:11:36] Finished 'html' after 64 μs
+
+So each time we make a change and save it, gulp runs "html" Task. And we can tell gulp watch to stop watching with ^C.
+
+Now let's create a New Folder for CSS in our assets folder, named "styles", and then a new CSS file named "styles.css"
+and leave the file blanck.
+Back in our "gulpfile.js", within our "gulp.task" let's create another Task
+
+// Creating another Task named styles
+gulp.task('styles', function() {
+	console.log("Imagine Sass or PostCSS tasks running here.");
+});
+
+// Creating another Task named watch
+gulp.task('watch', function() {
+	// Passing the watch() 2 arguments: 1.File we want to watch, 2.Action we want to do with it
+	// And whenever we make a change to index.html, it Triggers our html Task
+	watch('./app/index.html', function() {
+		gulp.start('html'); // html is tha name of the Task we want to Start.
+	} );
+
+	// Let's create a new watch Task for that CSS folder 
+	// ** is a Hypothetical Folder with an Hypothetical file with a css extension = *.css
+	watch('./app/assets/styles/**/*.css', function() {
+		gulp.start('styles');
+	} );
+
+
+});
+
+Back in the command line let's run gulp styles:
+
+$ gulp styles
+[18:29:52] Using gulpfile ~\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site\gulpfile.js
+[18:29:52] Starting 'styles'...
+Imagine Sass or PostCSS tasks running here.
+[18:29:52] Finished 'styles' after 116 μs
+
+
+And then let's run "gulp watch" and make changes to our styles.css and html files:
+
+$ gulp watch
+[18:31:20] Using gulpfile ~\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site\gulpfile.js
+[18:31:20] Starting 'watch'...
+[18:31:20] Finished 'watch' after 38 ms
+[18:32:09] Starting 'styles'...
+Imagine Sass or PostCSS tasks running here.
+[18:32:09] Finished 'styles' after 41 μs
+[18:32:22] Starting 'html'...
+Imagine something useful being done to your HTML here.
+[18:32:22] Finished 'html' after 95 μs
+
+
+Gulp was watching not only "styles" but "html" Files at the same time. Ctrl + C to Stop Watching.
+

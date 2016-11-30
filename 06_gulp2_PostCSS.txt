@@ -1,0 +1,202 @@
+What is a CSS workflow?
+***********************
+We mentionned previously something named CSS Autoprefixer, and that is an Automation tool that lets us write CSS like this
+
+.item{
+	columns: 200px 2;        and automatically turns it           .item {
+                                                                       -webkit-columns: 300px 2;
+	}                                                                     -moz-columns: 300px 2;
+	                                                                           columns: 300px 2; 
+                            into this ----------->>>>>                   }
+
+Autoprefixers can save us Tons of time. But even beyond those Autoprefixers, there are many other things we wish we could do while writing CSS that we can't do because Web browsers don't support it . And this is where things like:
+
+CSS Preprocessors
+=================
+-Sass
+-Less
+-Stylus
+
+come into play, they are tools allowing us to do some of the following things in CSS:
+
+-CSS Variables by saving an #hexadecimal color in a variable in order to reuse later
+-Nested CSS  but 0 browser supports that.
+
+So those tools above let us write CSS the way we wish we could write it, eventhough it won't work in web browsers, and then these tools pass our code through a filter that generates a new file that automatically converts our Code in regular CSS that this time, will work in Web browsers.
+
+But we are not going to use any of those Tools above, but the latest one named : "PostCSS"          
+-Popular new post-processor
+-And the Fastest to compile out of all pre/post-processors
+
+Vocab building: 3 Important Gulp/Node terms
+*******************************************
+-First thing we want to do is Opening our "gulpfile.js"
+-Previously we configured the Watch Task to Trigger the "gulp.task" named 'styles' if any changes were made on our CSS files occurred.
+-Our goal this time, within that 'styles' task, is writing Code that implements the neat CSS Features we talked about
+-And that would mean taking the contents of a CSS file, manipulating and converting that code, and then Outputting that code into a brand new CSS file.
+-In order to Achieve this, we need to pull out 3 Tools out of our Tool Box
+	gulp.src()
+	gulp.dest()
+	pipe()
+
+-gulp.src() is used for telling gulp where we are pulling out water From (Original folder where CSS file resides)
+-gulp.dest() is for telling gulp where we want that water to go (Designated Folder where a brand new CSS file is Created)
+-pipe() is a second pipe that manipulates the water, and filters it through PostCSS filters, and changes it for us.
+
+1. In our Code we want 'gulp.src()' to point towards our main.css file named 'styles.css'
+
+	gulp.task('styles', function() {
+		gulp.src('./app/assets/styles/styles.css')
+});
+
+2. We dont want to add a semicolon ';' right after our source, we want to chain on another Action, we want to move the contents of that src file into a pipe to do something. Let's start simple and just chose a destination where we would like our new file to be created, using of course 'gulp.dest()'. Chosing for destination a 'temp' folder and inside of it another 'styles' folder. 
+And also at the begining of the line, we now use the 'return' keyword.
+
+gulp.task('styles', function() {
+	return gulp.src('./app/assets/styles/styles.css').pipe(gulp.dest('./app/temp/styles'));
+});
+
+3. Let's add some dummy code in our main CSS file 'styles' and then run 'gulp watch' from the cmd line. And by making a little change inside our 'styles.css' file, while 'gulp watch' is running, a brand new 'temp' folder in which another 'styles' folder were created, as a brand new css file named 'styles.css'. Now if we open that new file, we see that it is an exact copy of our main 'styles.css' file. That's great but we're not exactly interested in making an exact copy of a file are we? We want to run our CSS code through our CSS filter named 'PostCSS filters'.
+
+4. Let's Set that up. Ctrl + C in command line to Stop the Watch.
+5. And jump in our 'gulpfile.js', and for now we only have 1 pipe that goes from gulp.src() to gulp.dest()
+6. Let's add a 2nd pipe that lets us run our Code through PostCSS filters
+7. But before using PostCSS within that new pipe() parenthensis we need to use 'npm' to download and install PostCSS
+8. Back in the cmd line type in: npm install gulp-postcss --save-dev
+9.travel-site@1.0.0 C:\Users\pc\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site
+`-- gulp-postcss@6.2.0
+  +-- postcss@5.2.5
+  | +-- js-base64@2.1.9
+  | +-- source-map@0.5.6
+  | `-- supports-color@3.1.2
+  |   `-- has-flag@1.0.0
+  `-- vinyl-sourcemaps-apply@0.2.1
+10.In our 'package.json' gulp-postcss is normally added to our gulp 'devDependencies'
+11."devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-postcss": "^6.2.0"
+  }
+
+12.Back to our 'gulpfile.js', at the top let's import, and require('gulp-postcss') package and store it in a new variable:
+	postcss = require('gulp-postcss');
+
+13.Now we use 'gulp-postcss' within our 2nd pipe that we set up. Out of the box 'gulp-postcss' can't do anything really amazing, we need to pick the Features that we want to use from that package, and the one that we want first is 'autoprefixer'. But for that we also need 'npm' to download it and install it
+14.Back the command line type in: npm install autoprefixer --save-dev
+
+	travel-site@1.0.0 C:\Users\pc\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site
+`-- autoprefixer@6.5.1
+  +-- browserslist@1.4.0
+  +-- caniuse-db@1.0.30000576
+  +-- normalize-range@0.1.2
+  +-- num2fraction@1.2.2
+  `-- postcss-value-parser@3.3.0
+
+15.When that completes, let's go back to our 'gulpfile.js', let's import it by requiring it at the Top:
+	autoprefixer = require('autoprefixer');
+
+16.Now we can use the package within our pipe. PostCSS is expecting an Array:
+
+	gulp.task('styles', function() {
+	return gulp.src('./app/assets/styles/styles.css')
+		.pipe(postcss([autoprefixer]))
+		.pipe(gulp.dest('./app/temp/styles'));
+});
+
+17. Save the file, and let's run 'gulp watch' from the cmd line, and also make a few changes to our main CSS file to trigger the 'styles' Task
+18. If we just add a new property that doesn't need to be prefixed by any browser, that new entry would be copied normally to the new CSS file with no problem.
+But if we add a property that usually needs Vendors Prefixes like columns, look what happens in the new file when we hit save; Vendors Prefixes are automatically added for us.
+Original
+========
+	body {
+	padding-bottom: 20px;
+	margin: 10px;
+	columns: 300px 2;
+}
+
+New CSS file:
+=============
+body {
+	padding-bottom: 20px;
+	margin: 10px;
+	-webkit-columns: 300px 2;
+	   -moz-columns: 300px 2;
+	        columns: 300px 2;
+}
+
+19. Let's add another feature, like 'CSS Variables' that we would like to use over and over in our CSS code. Ctrl + C the gulp watch
+20. And lets use 'npm' to install a new package: npm install postcss-simple-vars --save-dev
+	travel-site@1.0.0 C:\Users\pc\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site
+`-- postcss-simple-vars@3.0.0
+21. Let's import it in our 'gulpfile.js' file:
+	cssvars = require('postcss-simple-vars');
+
+22. And add it to our pipe Array:
+	gulp.task('styles', function() {
+	return gulp.src('./app/assets/styles/styles.css')
+		.pipe(postcss([cssvars, autoprefixer]))
+		.pipe(gulp.dest('./app/temp/styles'));
+});
+
+23. Run 'gulp watch' and go back to our main 'styles.css' file, to create a Variable:
+
+Original:
+========
+/*Creating a color variable*/
+$mainBlue: #2f5572;
+
+body {
+	color: $mainBlue;
+	padding-bottom: 20px;
+	margin: 10px;
+	columns: 300px 2;
+}
+
+New CSS:
+========
+/*Creating a color variable*/
+
+body {
+	color: #2f5572;
+	padding-bottom: 20px;
+	margin: 10px;
+	-webkit-columns: 300px 2;
+	   -moz-columns: 300px 2;
+	        columns: 300px 2;
+}
+
+24. Let's add another Feature called 'Nested CSS', Ctrl + C to Stop the Watch, and then Use 'npm' to install the new package.
+25. Back in the cmd line: nmp install postcss-nested --save-dev
+	travel-site@1.0.0 C:\Users\pc\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site
+`-- postcss@5.2.5
+26. Let's import it in our 'gulpfile.js' file:
+nested = require('postcss-nested');
+
+27. And add it to our pipe:
+
+gulp.task('styles', function() {
+	return gulp.src('./app/assets/styles/styles.css')
+		.pipe(postcss([cssvars, nested, autoprefixer]))
+		.pipe(gulp.dest('./app/temp/styles'));
+});
+
+28. Let's fire up 'gulp watch', and let's add some nested CSS in our main File. A new class Box that is targetting every single anchor link element with the class of box:
+
+Original:
+=========
+/*This is Not Valid CSS at all*/
+
+.box {
+	a {
+		display: block;
+		padding: 10px;
+	}
+}
+
+New CSS:
+========
+/*This is Valid CSS */
+
+.box a {
+	display: block;
+	padding: 10px;
+}
