@@ -1,0 +1,254 @@
+Overview
+********
+Let's continue building our CSS. First off, let's take care of the Intro Area typography, the text styles for these headlines.
+Let's find them in our HMTL file, we're looking for "The first trip...etc" element. So back in our editor let's find those elements to give them class names. What should we name those classes? Instead of treating them or this area as a unique section, we're going to create a generic reusable 'headline' block, because if we scroll down in the Design File, we notce other similar headlines.
+So let's give those elements '<h2> and <h3>' a class name of 'headline' and then create a new CSS file dedicated to that specific class 'headline'. So within our 'modules' folder, let's create a new file and name it '_headline.css'.
+Next we create a class '.headline' and begin styling.
+
+Styling our 'headline' class
+============================
+First off, let's make the heading so that it's not so bold with 'font-weight: 300', and save. But before we can see the changes in the browser, we need to import that new file into our main 'styles/styles.css'.
+
+	@import "modules/_headline";
+
+Save it, and check out what it looks like in the browser; it looks Ok.
+Now what we want to do is to change the 'font-size' to match the Design File. That text measures around 46px tall, but remember that we want this measurement converted in 'rem': 
+	So 46px / 16 px = 2.875rem
+
+So back in our 'headline.css' file, let's write, then save:
+
+	font-size: 2.875rem;
+
+That looks a lot better; Then let's make the baseline color 'blue' for this block instead of Black, by writing in the same file our $mainBlue variable:
+
+	color: $mainBlue;
+
+Now let's work on modifier classes for those 2 other elements "The first trip....." and "Ever since...." headings.
+If we look at the Design File, those 2 elements shoud be horizontally centered, so back in our HTML let's add to those 2 elements, modifiers of 'headline--centered':
+
+	<h2 class="headline headline--centered">The first trip we planned was our own.</h2>
+    <h3 class="headline headline--centered">Ever since, we&rsquo;ve been working to make travel better for everyone.</h3>
+
+Then in our '_headline.css', let's create a modifier rule: 
+
+	&--centered {
+		text-align: center;
+	}
+
+Let's check out the browser; Perfect...Now if we compare with the Design File, we see that the 2nd header should be Orange. So back in our HTML file, let's add another modifier to that particular header named 'headline--orange'.
+
+	<h3 class="headline headline--centered headline--orange">Ever since, we&rsquo;ve been working to make travel better for everyone.</h3>
+
+Then in our '_headline.css', we can create another modifier rule and use our '$mainOrange' variable named :
+
+	&--orange {
+		color: $mainOrange;
+	}
+
+Check out in the browser; Perfect....But compared to the Design File, that same header must have a bit smaller font-size than the others. So back in our HTML, let's create a new modifier named 'headline--small':
+
+	<h3 class="headline headline--centered headline--orange headline--small">Ever since, we&rsquo;ve been working to make travel better for everyone.</h3>
+
+And back in our '_headline.css' file, let's create a new modifier rule: 
+
+	&--small {
+		font-size: 1.875rem;
+	} 
+
+And make sure to measure the font-size from our Design file, from the top of a letter 'b' to the bottom of the letter 'y', and it looks like that's about 30px tall, but we want that in terms of 'rem': 
+
+	30px / 16px = 1.875rem
+
+So paste that in our new '&--small' modifier rule, and check it out in the browser. Perfect, but we notice that the 2nd line should be dropped into a 'new line'!!
+So to apply this effect, we can assign a 'max-width' to that element. So back in our HTML file, let's add a new modifier to that element named 'headline--narrow'
+
+	<h3 class="headline headline--centered headline--orange headline--small headline--narrow">Ever since, we&rsquo;ve been working to make travel better for everyone.</h3>
+
+Then in our '_headline.css' file, let's create a new modifier rule: 
+
+	&--narrow {
+		max-width: 500px;
+	}
+
+Check out the browser, well that drops the headline into a 2nd line, but now we want that 500pixel element to be horizontally centered itself so we add to that modifier rule 2 more things: 
+
+	&--narrow {
+		max-width: 500px;
+		margin-left: auto;
+		margin-right: auto;
+
+	}
+
+Check out the browser; Excellent!! If we compare in the browser, we can notice that the 2 first headlines use a very slightly thinner or lighter font-weight than the 3rd headline.
+So to implement that difference, back in our HTML file, let's add a new modifier to the 2 Top headlines, named 'headline--light'
+
+	<h2 class="headline headline--centered headline--light">The first trip we planned was our own.</h2>
+      <h3 class="headline headline--centered headline--orange headline--small headline--narrow headline--light">Ever since, we&rsquo;ve been working to make travel better for everyone.</h3>
+
+In our '_headline.css', let's create a new modifier rule: 
+
+	&--light {
+		font-weight: 100;
+	}
+
+This is a super thin font-weight, let's check out the browser, perfect!! Next thing that we see is that, certain words need to be bold.
+So in our HTML, let's bold those keywords with a <strong> tag: 
+	
+	<h2 class="headline headline--centered headline--light">The first trip we planned <strong>was our own.</strong></h2>
+    <h3 class="headline headline--centered headline--orange headline--small headline--narrow headline--light">Ever since, we&rsquo;ve been working to make travel <strong>better for everyone.</strong></h3>
+
+Check out the browser, looking good; Now we should decrease the margin below the first headline, and increase the margin below the second headline.
+So to do that let's add a few modifiers classes. In the first headline let's add a new modifier named 'headline --b-margin-small', 'b' for bottom, and on the 2nd headline let's add 'headline--b-margin-large':
+
+	<h2 class="headline headline--centered headline--light headline--b-margin-small">The first trip we planned <strong>was our own.</strong></h2>
+    <h3 class="headline headline--centered headline--orange headline--small headline--narrow headline--light headline--b-margin-large">Ever since, we&rsquo;ve been working to make travel <strong>better for everyone.</strong></h3>
+
+And then create those 2 modifiers rules in our '_headline.css' file: 
+
+	&--b-margin-small {
+		margin-bottom: .5em;            <--- em refers to the font-size element Itself, meaning that we      
+	}                                        can reuse this class on other headlines that have different
+	                                         font-size, and this will always Scale with it really nicely
+
+	&--b-margin-large {
+		margin-bottom: 1.6em;
+	}
+
+Now we just need to save our CSS and check in the browser. Now we're done with the styling of this 'headline'block.
+
+Too many modifiers for those headlines?
+=======================================
+Using the BEM (Block Element Modifier) is easier to maintain than creating tons of CSS files and classes. With BEM Everything is Centralized in One and Unique file, that we can edit.
+
+
+Back to Centering Images horizontally 
+=====================================
+Earlier, we created a class named 'wrapper' that centers our element with a 'max-width' of 1200px, so why don't we use it to wrapp that image and then create a new modifier that makes it Narrower? 
+So in our HTML, let's wrap that image in a new <div> with that class 'wrapper', and add a new modifier named 'wrapper--medium' that will be a bit narrower than our default 1200px.
+Let's open our '_wrapper.css' file, and create a new modifier rule: 
+
+	&--medium {
+	 max-width: 976px;                <-- instead of our default 1200px
+	}
+
+                                     =========================================
+
+
+   .wrapper {
+	padding-left: 18px;
+	padding-right: 18px;
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+
+	&--medium {
+		max-width: 976px;
+	}
+
+
+}
+
+
+I think that we're done with that 'Intro Area', but let's take a look at the 'Mobile View', and we notice a large Gap between 'large-hero' and 'Intro Area'. 
+That Gap looks Ok on Desktops, but not really on a Smart phone type of screen, we can Tune it a bit...
+
+Back in our Editor, let's open '_page-section.css', and we know that : 
+
+
+
+.page-section {
+	padding: 4.5rem;                 <-- That vertical padding Looks great on Larger screens
+}                                        but let's wrapp it in @media query and say when the
+                                         screen is large enough to be considered medium, let's 
+                                         use that value of 4.5rem;
+                                         But let's set up a Smaller Baseline padding for smaller
+                                         screens.
+
+
+.page-section {
+	padding: 1.2rem;
+
+	@mixin atMedium {
+		padding: 4.5rem;             <-- That Does the Trick for both types of screens Smart phones
+		                                 and Desktops.
+	}
+}
+
+
+
+Always looking at the 'Mobile View', we see that the font-size is way too large so to adjust that, let's go into our '_headline.css' file and we know that our default font-size: 2.875rem; looks great on Larger screen, so let's paste it and place it in @media query that applies only to larger screens. And then set up a smaller font-size Baseline. Looks good!! 
+But that 2nd orange headline has to be smaller than 'The first trip', so let's decrease it by creating a new Baseline font-size and keep the original into a @media query.
+
+
+	.headline {
+	font-weight: 300;
+	font-size: 1.9rem;
+	color: $mainBlue;
+
+	@mixin atSmall {
+		font-size: 2.875rem;
+	}
+
+	&--small {
+		font-size: 1.2rem;
+
+		@mixin atSmall {
+			font-size: 1.875rem;
+		}
+
+Image Issue on Small Screens
+============================
+On large Screens, having the image horizontally centered looks alright, but on small ones that same image looks Odd.
+On small screens, it would be better for the image to use the Full available Width, and the reason we're having that spacing, is because that image is wrapped inside another wrapper. If we look at our HTML there's the <div> for that image: 
+
+	<div class="wrapper wrapper--medium">
+        <img src="assets/images/first-trip.jpg" alt="Couple walking down a street.">
+    </div>
+and this <div> is Nested in another <div> above that has the class of 'wrapper'. So what we can do is, open the '_wrapper.css' file and let's just say that any wrapper that is Nested within a wrapper should not have any longer any horizontal padding so we offset our padding left and right to 0.
+
+
+	.wrapper {
+	padding-left: 18px;
+	padding-right: 18px;
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+
+	&--medium {
+		max-width: 976px;
+	}
+
+	.wrapper {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+}
+
+Now on smaller screens the image is taking almost full width, we keep the original 18px horizontal padding on each side, but it doesn't get applied to any Nested wrappers and that looks a lot cleaner.
+And we keep the original layout on Larger screens.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

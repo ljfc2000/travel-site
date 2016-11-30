@@ -1,0 +1,171 @@
+Overview
+********
+Back to writing CSS, we're going to clean up the mobile view of our 'large-hero' block.
+We notice that the text on both sides, is pushing to the edges, and this is something that we want to avoid at all cost.
+So let's add a bit of padding on the left and the right sides. Our first instinct would be to open our 'large-hero.css' file, since that's the block we're looking at. However, we must ask ourselves, if that little issue's unique or is it a pattern that we can see throuhgout the page?
+Well if we look down, we can see that this is a design pattern that we're dealing with. So because this is not unique to the 'large-hero' block, instead of writing CSS to the 'large-hero' file, lets' go ahead and create a new file in our modules folder, and name it '_wrapper.css'.
+
+Inside that file we'll create a class wrapper '.wrapper', and give it a little bit of padding on the left and on the right and save the file.
+
+/*Creating a class wrapper*/
+
+.wrapper {
+	padding-left: 18px;
+	padding-right: 18px;
+}
+
+Then back in our main CSS file 'modules/styles.css', we want to add a new input that points to our new 'wrapper.css' file and import it.
+
+@import "modules/_wrapper";
+
+Now we can use that '.wrapper' class in our HTML. So let's open our 'index.html' file, and find our 'large-hero' section. So where do we want to add that '.wrapper' class, that will add that left and right padding?
+We know that we want to apply that padding to the Text content and nothing else, so let's scroll down to that 
+
+	<div class="large-hero__text_content">
+
+That <div> element houses several elements like <h1> <h2> <p>, let's wrap those elements inside a new <div> with a class='wrapper' and make sure to indent the elements, and save this file.
+
+	<div class="large-hero__text_content">
+      <div class="wrapper">
+        <h1 class="large-hero__title">Your clarity.</h1>
+        <h2 class="large-hero__subtitle">One trip away.</h2>
+        <p class="large-hero__description">We create soul restoring journeys that inspire you to be you.</p>
+        <p><a href="#" class="btn btn--orange btn--large">Get Started Today</a></p>
+      </div>
+    </div>
+
+Let's check in the browser, and indeed we have the spacing that we wanted.
+
+Next, we want to finetune the font sizes of those Text elements. To do that, we open the 'large-hero.css' file and resize the fonts of each element.
+
+-Let's resize the 'Your Clarity' font-size rule, It has a baseline font-size of 1.1rem; and that is way to small
+ we can afford to have a bigger font-size even at the level of mobile-view. So let's try 2.4rem;
+ We can also use a larger font-size for larger screen, earlier we set up 3 @media queries for that element, because we were learning how to use a @mixin. In reality this is Overkill, in fact as soon as the screen hits the '@mixin atSmall font-size: 2rem;' we can begin to use the '@mixin atLarge font-size: 4.8rem;'size, so let's use 4.8rem in 
+ "@mixin atSmall" and delete the medium and large one.
+
+
+
+
+
+	&__title {                                                     &__title {
+		font-weight: 300;                                              font-weight: 300;
+		color: $mainBlue;                                              color: $mainBlue;
+		margin: 0;                                                     margin: 0;
+		font-size: 1.1rem;                                             font-size: 2.4rem;
+
+		@mixin atSmall {                                               @mixin atSmall {
+			font-size: 2rem;                                                font-size: 4.8rem;
+		}                                                              }
+		
+
+		@mixin atMedium {
+			font-size: 3.2rem;
+		}
+
+		@mixin atLarge {
+			font-size: 4.8rem;
+		}
+		
+	 }
+
+
+-Next we can also bump up the subtitle 'One Trip away' fon-size element, and let's change the rule from 1.1rem; to 1.5rem;
+
+	&__subtitle {
+		font-weight: 300;
+		color: $mainBlue;
+		font-size: 1.5rem;
+		margin: 0; 
+
+
+		@mixin atSmall {
+			font-size: 2.9rem;
+		}
+
+
+-Next let's shrink the font-size of that White Text, we want to keep 'font-size: 1.875rem;' as is for Large Desktop screens, but we also want to set up a smaller baseline font-size; so let's use a '@mixin atSmall', that way, once a browser window is large enough to at least, being considered 'at Small' instead of our baseline, then we can use a font-size of 1.875rem; but for that to happen we need to change and lower our initial baseline to 1.1rem;
+ 
+
+
+	&__description {
+ 		color: #FFF;
+ 		font-size: 1.1rem;
+ 		font-weight: 100;
+ 		text-shadow: 2px 2px 0 rgba(0,0,0, .1);
+ 		max-width: 30rem;
+ 		margin-left: auto;
+ 		margin-right: auto;
+
+
+ 		@mixin atSmall {
+ 			font-size: 1.875rem;
+ 		}
+ 	}
+
+
+-Next let's lower the font-size of that 'Get Started Today' button for small screens. The CSS for that button 
+ element lives in that '_btn.css' file. And if we look for that button in our HTML file, we notice that the button  is using a BEM modifer class: 
+
+ 	 <p><a href="#" class="btn btn--orange btn--large">Get Started Today</a></p>
+
+ So back in our CSS file, we want to change and edit the &--large rule; We think that font-size: 1.25rem; is good enough for Larger screens, so let's create a '@mixin atSmall' with that same font-size, and for smaller screens or for our baseline, we can remove that one 'font-size: 1.25rem;', and that will default it to 1rem;
+Now at this point, our 'large-hero' block looks pretty good on a Smart phone, and all of our 'styles' that target larger screens, are still in place.
+
+
+
+ .btn {
+	background-color: $mainBlue;
+	color: #FFF;
+	text-decoration: none;
+	padding: .75rem 1.2rem;
+	display: inline-block;
+
+	&--orange {
+		background-color: $mainOrange;
+	}
+
+	&--large {
+		padding: 1.1rem 1.9rem;
+
+
+		@mixin atSmall {
+			font-size: 1.25rem;
+		}
+	}
+
+}
+		
+The only thing that is missing compared to the Design File, is that 'blue border' at the bottom; so let's add it, in our 'large-hero.css' file, and within that '.large-hero' rule, let's add a new line with the 'border' property.
+Let's save it and open the browser. We notice that little white space between the Image and the border, and we don't want that Gap. The reason why that Gap exists is because our Image element is an Inline level element instead of a 'block level element'.
+So let's switch that Image to become a 'block level element' and get rid of that white Gap. In our 'large-hero.css', we don't have a rule that targets the Image file.
+So back in our HTML element, let's target our Image element within our <picture> element, and add a class to it so we can select it within our CSS. A class of 'large-hero' because this is the block that it belongs to, and using the BEM system; and to signify that this is an element we use 2 underscores, and let's name that element image
+	
+	class="large-hero__image"
+
+Then back in our CSS file, we can select the 'image' by creating a new rule, and let's just tell it to become a 'block level element'. And as soon as we save that image, that white Gap should disappear.
+
+How that 'display: block;' works? Well by default browsers treat 'Image elements' as Inline level elements.
+What does that mean? It basically means that the browser thinks that the image is similar to a line of text (with display: inline;) the gap comes back, and because the browser thinks that this might be a line of text, it wants to leave a little bit of room for the bottom part of certain letters that hang below the rule (for instance a 'g')
+or a 'y') you get the idea.
+So by declaring that the image is a 'block level element', we're telling the browser to treat the image like a 
+<div>, so it treats it like as a rectangle that align perfectly without leaving any room for bottom parts of letters. At this point our 'large-hero' block is complete.
+
+
+	&__image {
+		display: block;
+	}
+
+
+
+.large-hero {
+	border-bottom: 10px solid $mainBlue;
+	position: relative;
+	&__text_content {
+		/*color: $doesNotExistVariable;*/
+		position : absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		left: 0;
+		width: 100%;
+		text-align: center;
+	 }

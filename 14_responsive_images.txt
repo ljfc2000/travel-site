@@ -1,0 +1,113 @@
+Overview
+*********
+1. What is a responsive image and why do we need it?
+====================================================
+If we take the following image : <img src='images/dog-crop-large.jpg' alt='Puppy in the sand.'> we see right away that this image is perfectly fine for a large screen. However on a smaller device, we can see that, the same image is way to big to download. The end user should not have to download unnecessay data. Plus on a smart phone that image looks like more a stretched out picture than anything else.
+Bottom line that <img> element is forcing us to send that same image in its current format to every single users under the sun.
+In fact what we need is, sending different images to different screen sizes. And that's exactly what responsive images Do!
+So we are going to convert that image in 2 different ways in order to get a responsive image.
+
+
+2. Example page: Two unique situations (2 Unique Code patterns)
+===============================================================
+There are 2 different reasons to use a responsive image in the first place, and depending on what situation we're on, we need to write different code. So those situations are:
+
+A. Art Direction & cropping situation (with picture element)
+------------------------------------------------------------
+So first thing first, we need to delete that traditional <img> element
+So when you want to send different images to different users with Art direction & cropping situation, you use the following steps: 
+
+	-You use the <picture></picture> element
+	-within that element you use a self closing <img> element
+	-and we want to begin with the smallest image
+	-we save and open the browser and refresh
+	-Well that small image will be used for all devices
+	-Now within that <picture> element we can create an element named <source>
+	-And within that <source> element we can create a @media query
+	-First a @media query that is targeting screens that are 760px or larger
+	-And what do we want to do when screens are that large, we want to use the Medium size image of the dog
+	-So within that same <source> element we add another attribute named "srcset" that points to the Medium size img
+	-That way in the browser, switching from a small to a medium size window, Switches from small img to Medium img
+	-Now let's set up our Large image with another <source> and @media query for screens that are 1200px or larger
+	-If the screen meets that condition, we want to use the large image with "srcset" attribute
+	-So now in the browser, when window hits 1200px width, it uses the large image
+	-And this is how we use Responsive Images with Art direction & cropping situation.
+
+
+
+	<picture>
+		<source srcset="images/dog-crop-large.jpg" media="(min-width: 1200px)">
+		<source srcset="images/dog-crop-medium.jpg" media="(min-width: 760px">
+		<img src="images/dog-crop-small.jpg" alt="Puppy in the sand.">
+	</picture> 
+
+		
+B. Image resolution & file size situation (faster load times)
+-------------------------------------------------------------
+In this example we use the same 3 pictures: small, medium and large. The issue remains the same, we don't want the end user to download images that are too Big.
+
+	-In this situation however we don't need the <picture> element
+	-Instead we start with a traditional <img> element
+	-In which we use the 'srcset' attribute to list all of our images
+	-And we don't need any @media query, browsers and devices are self-aware of their sizes
+	-However we still need as developers, to help the browser out, by telling which image to use and when
+	-By indicating the size of each image
+	-So after each image, we indicate the width of each image
+	-For the small one we write, 570w, for 570px wide
+	-Then we save, and open up the browser, to see how it responds
+	-And the browser is intelligent enough to make its own choice
+	-The only issue here is, when the browser uses a large image at its highest resolution and switches back to a smaller screen, it keeps the large image, instead of switching back to smaller one.
+	 
+	 Therefore you need to clear your cache, or open a new window to get back to intelligent browser choice decisions.
+
+
+	<img srcset="images-resolution-small.jpg 570w, images-resolution-medium.jpg 1200w, images-resolution-large.jpg 1920w" alt="Puppy in the sand.">
+
+
+3. Apply it and begin adding responsive images to our travel-site 
+==================================================================
+-First let's run 'gulp watch'
+-And then make our 'large-hero' block, a responsive image
+-Right now we see that our image crop is problematic, when we shrink the window
+-So let's fix it by opening the 'index.html' file
+-And let's look for that <img> element that we want to replace
+-And we can see that our 'large-hero' image points to this: <img src="assets/images/hero--large.jpg"> element
+-In our assets/images folder we see that we got different sizes for that same image
+-First let's delete this line: <img src="assets/images/hero--large.jpg">
+-And replace it with a picture element, and within that element, we create a <img> element
+-In which we want to start working with the smallest img first
+-So we want to go into our assets folder, then our images, and pick the smallest img
+-Let's make sure to include an 'alt' attribute and its value
+-Let's now create a new <source> element with a brand new @media query for larger screen sizes
+-For screens of 640px or larger stop using the smallest img, but start using small img instead
+-Indicated in the 'srcset' attribute
+-In the browser, the image switches from smallest to small as soon as the window gets wider
+-Now we want to do the same for the Medium and Larger images
+-So let's copy the same line of code twice
+-Then edit the name of the image, and change the @media query with a new width resolutions
+-We just Created a Responsive image
+-Is our job Done?
+-No let's say we have a very large Monitor, we would like to use a Higher resolution img that doubles the Size
+-In our assets/images folder we have the matching High dpi images
+-let's use them in our code, by anticipating that possible option
+-by adding the name of that hi-dpi image, and let's not forget to indicate the px width of each image
+-let's add the hi-dpi for medium, small, and smaller crops
+-for the smallest crop, we need to change the 'src' attribute to 'srcset' instead
+-Now we're done for that particular image.
+
+	
+	<picture>
+		<source srcset="assets/images/hero--large.jpg 1920w, assets/images/hero--large-hi-dpi.jpg 3840w" media="(min-width: 1380px)">
+		<source srcset="assets/images/hero--medium.jpg 1380w, assets/images/hero--medium-hi-dpi.jpg 2760w" media="(min-width: 900px)">
+		<source srcset="assets/images/hero--small.jpg 990w, assets/images/hero--small-hi-dpi.jpg 1980w" media="(min-width: 640px)">
+		<img srcset="assets/images/hero--smaller.jpg 640px, assets/images/hero--smaller-hi-dpi.jpg 1280w" alt="Coastal view of ocean and mountains.">
+	</picture>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,172 @@
+Goals:
+******
+Completing the:
+	-large-hero block
+	and 
+	-new btn block
+
+Large-hero block
+================
+
+The first thing that we want to do is eliminating the spacing, the margin between the different Text elements. So back in our '_large-hero.css' file, let's add to the 'title' element:
+	- margin: 0;
+and do the same thing with the 'subtitle':
+	-margin: 0;
+
+The next thing that want to do is to make the following Text element 'We create...' White, and use a larger font-size that we currently have. So let's locate that text element inside our HTML file, and give that element a class name, belonging to the 'large-hero' block.
+	- <p class="large-hero__description">We create...</p>
+
+Then back in our CSS file underneath the subtitle, let's create a brand new rule: 
+	&__description{
+		color: #FFF;        (for white)
+		font-size: 1.5rem;
+	}
+
+Now let's take a look in the browser, to see what it looks like. It doesn't look quite good. 
+Perfect timing to talk about 'rem'. Well whenever we start talking about it, and declare a:
+	-font-size
+	-padding
+	or 
+	-margin
+we want to do so in terms of 'rem', instead of 'px', '%', or 'em'. So what is 'rem'?
+
+Whenever we talk about 'rem' everything is relative to the Root of the page, and the Root of any HTML web page is the <html> element, so each time we use for instance '1.5rem', the browser will take whatever the font-size of this main Root
+<html> element is, and multiply it by '1.5', most of the browsers will have a default font-size of 16px, so in our case that means (16*1.5=24px);
+The issue here is not everyone in the world has the same defaulted font-size, so by using 'rem' no matter your default font-size, 'rem' allows us to honor the end-user font-size preferences.
+
+Back to our website, how to eleminate the 'Guessing work' and find out exactly what the font-size should be? Well usually we would use tools like Photoshop or Illustrator...
+But most of the time the Designer tells us the size he wants. So let's say that he wants a font-size of 30px...We Just divide (30/16=1.875px). Let's take a look in our browser, refresh, and it looks OK. Now let's find a way to thinner that font-weigh:
+	font-weight: 100;
+
+Ok let's compare now to the Design file, and if we look closely, we can see a super subtile shadow on this white Text; so let's try a really small text-shadow of just 2px 2px offset, 0 blur, and what color should it be? let's try it Black but a very transparent Black (.1) we only want the Black to be 10% visible.
+	
+	text-shadow: 2px 2px 0 rgba(0,0,0, .1);
+
+Let's compare and it looks better now. Our last bit of Business with that White headline now is to make it drop to a 2nd line after the word 'journeys', so how do we do that?
+I would measure from the design file the width of that headline which is approximately 480px;
+Then back in our CSS file, I would add: 
+
+	max-width: 480px;
+
+That Does the job, but now we want that Text to be Centered and Aligned in that Entire block, so we use: 
+
+	margin-left: auto;
+	margin-right: auto;
+
+There we have it; 480px is the perfect width to use to break that headline in a 2nd line, but if the user has customized its default settings to a larger font-size, 480px won't work.
+So instead of using pixels here, we convert it to 'rem' by dividing (480/16 = 30rem), and that's It...Excellent
+
+	max-width: 30rem;
+
+
+Button block
+============
+Wee see on the desing file 3 different buttons. Let's say that this medium-size Blue button in the <nav> bar is the default State for the button block.
+So let's locate that 'get in touch' button element in our HTML file, and we can see it inside of an <a> anchor tag.
+Let's give that element a class name in order to target it with our CSS. 
+	
+	class="btn"
+
+Then let's create a brand new CSS file just for this button block and save it in Our 'modules' folder as 'btn.css'
+Back in our Design file, the first thing that we want to do is give that button a blue background with white text:
+
+	.btn {
+		background-color: #2f5572;
+		color: #FFF;
+	}
+
+If we save that file and take a look in the browser, we'll see that nothing happens. The reason? We need to import that button block inside our Main stylesheet. So let's import it by opening up our Main styles.css file:
+
+	@import "modules/btn";
+
+Back in the browser let's see what it looks like. Ok a bit of a progress, and we notice that 'Blue' color that we're using for our button is the same exact color that we are using for our Text in 'large-hero' block, so we dont have to remember the hexadecimal code that we use for that 'Blue', so let's create a variable of that 'Blue' color that we can reuse inside of our Blocks. So let's copy the #hexadecimal code and store it in a variable named $mainBlue:
+
+	$mainBlue: #2f5572;
+
+and replace it like this: 
+
+	.btn {
+		background-color: $mainBlue;
+		color: #FFF;
+	}
+
+But there is no sense of keeping this definition variable inside that '_btn.css' file, instead let's create a brand new file in the /base/styles folder, that has the single-responsibility of holding our variables.
+So let's create that file and name it '_variables.css', then cut our variable and paste it in there.
+Then make sure to import that new variable in our Main 'styles.css' file:
+
+	@import "base/_variables.css";
+
+Let's update 'title & subtitle' in the '_large-hero.css' file with that new $mainBlue variable.
+
+Now let's keep going with the Styling of our button; we first want to remove the under-line with:
+	
+	text-decoration: none;
+
+then let's give it a bit of padding with: 
+
+	padding: 1.2rem;
+
+and because we're using a bit of padding, let's make sure that we are setting it up as an Inline block level element with:
+
+	display: inline-block;
+
+that way its Parents and surrounding elements will be aware of its vertical padding. Let's save it and go take a look in the browser....and :( we get an error in the command line...
+What's wrong? 
+We saved our '_btn.css' before '_variables.css' therefore the variable appears like not Defined, not existing yet...
+So we need to restart the 'gulp watch' in our command line and then go back in the browser to see the changes
+
+Back to our button, our horizontal padding looks ok, but our vertical padding is not...We have a bit too much
+So in out '_btn.css' file we give padding a vertical value of .75rem for Top and Bottom padding with:
+
+	padding: .75rem 1.2rem; 
+
+Back in the browser that looks better. At this point our default state for the button block is Good to Go!!
+
+Now let's work on the other instances of the button; id we scroll down we see another button, but that is this time orange...let's locate it in our HTML file (Ctrl + F = 'Get in touch')
+Then let's give it a class name of:
+
+	<a class="btn" href="#">Get in Touch</a></p>
+
+Save it then back in the browser refresh, and we'll see our new button inheriting from our 'button style'. Now we want to make it 'orange' instead of 'Blue'.
+
+So back in our HTML file, let's give our 2nd button a second class name, and we want to use a BEM modifier.
+To use a BEM modifier we use 2 dashes and then the modifier like that:
+
+
+	<a class="btn btn--orange" href="#">Get in Touch</a></p>
+
+Then in our '_btn.css' file, we create that new rule for that modifier, inside the Main block '.btn', we nest it.
+
+.btn {
+	background-color: $mainBlue;
+	color: #FFF;
+	text-decoration: none;
+	padding: .75rem 1.2rem;
+	display: inline-block;
+
+	&--orange {
+		background-color: $mainOrange;
+	}
+
+}
+
+
+But first let's create a brand new variable that color orange in our '_variables.css' file:
+
+	$mainOrange: #d59541;
+
+Back in the browser refresh...it looks good!
+Now let's work on the button inside our 'large-hero' block. Orange button but a bit bigger.
+Let's find that button in our HTML file, and give it those 2 same classes:
+
+	<p><a href="#" class="btn btn--orange">Get Started Today</a></p>
+
+Refresh the browser, and it shoulb be transformed into an orange button now, and it is. 
+Now let's add a modifier to change its size 'btn--large' in our HTML file, then back in '_btn.css' let's create a brand new rule for that modifier as well that bumps up the font-size and give it extra padding with: 
+
+	&--large {
+		font-size: 1.25rem;            <--- font-size 25% larger than the default font-size
+		padding: 1.1rem 1.9rem;        <--- Vertical Horizontal
+	}
+
+Back in the browser, refresh and there you have it!
