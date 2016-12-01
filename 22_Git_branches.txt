@@ -1,0 +1,220 @@
+Overview
+********
+
+Understanding what a 'branch' is
+================================
+Alt + F2 (cmd + T on mac) to open a new tab in command line if you're running gulp watch. Let's get started by typing in the following cmd
+
+~ git branch                         <-- This command will list all the branches in our Repo
+* master
+
+At this moment we only have 1 branch, and its name is *master. We can think of a branch as a version of our project. We usually think of the 'master branch' as our primary, the main, the live, the production version of our project, that is why we usually never commit working progress code to the master branch. We usually create a new branch for each new feature of our project. This way within those new branches, we're free to try new things without running the risk of breaking something within our master branch.
+
+
+How to create a new branch
+===========================
+Before creating a new branch, we want to make sure that we have a clean working directory, that means we don't want to have any uncommitted changes. So to find out we need to run the following command:
+
+
+$ git status
+
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   app/assets/styles/base/_global.css
+        modified:   app/assets/styles/modules/_headline.css
+        modified:   app/assets/styles/modules/_row.css
+        modified:   app/assets/styles/styles.css
+        modified:   app/index.html
+        modified:   app/temp/styles/styles.css
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        app/assets/styles/modules/_generic-content-container.css
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+-------------------------------------------------------------------------
+We can see that we have a few files that haven't been committed yet, so we need to add those files to our Staging Area with the following command or one by one: 
+
+$ git add -A
+
+warning: LF will be replaced by CRLF in app/temp/styles/styles.css.
+The file will have its original line endings in your working directory.
+
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git_Dev/Projects/travel-site (master)
+
+$ git status
+
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   app/assets/styles/base/_global.css
+        new file:   app/assets/styles/modules/_generic-content-container.css
+        modified:   app/assets/styles/modules/_headline.css
+        modified:   app/assets/styles/modules/_row.css
+        modified:   app/assets/styles/styles.css
+        modified:   app/index.html
+        modified:   app/temp/styles/styles.css
+------------------------------------------------------------------------------------------
+Now all those files are in the Staging Area before being committed. But what if we see a file that we don't want to commit? Let's say that we see a file that we want to remove from the Staging Area.... We would use for example the following command to do so: 
+
+$ git reset app/index.html 
+
+Then we would verify that the file has been removed with this one again:
+
+$ git status 
+
+Now we want to commit our files so we just type in :
+
+$ git commit -m 'Completed large-hero block and intro content block'
+
+[master 074d3c0] Completed large-hero block and intro contents block
+ 7 files changed, 94 insertions(+), 19 deletions(-)
+ create mode 100644 app/assets/styles/modules/_generic-content-container.css
+
+
+Then we check the status once again:
+
+$ git status
+
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+nothing to commit, working tree clean               <-- This is what we wanted to See
+
+"Workind Tree or Working Directory Clean", tells us that we are ready to create a new branch. We would use the following command with the name of that new branch:
+
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git_Dev/Projects/travel-site (master)
+$ git branch my-new-branch
+
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git_Dev/Projects/travel-site (master)
+$ git branch
+* master
+  my-new-branch                      <-- WE list all of our branches we have in our Repo (or Project)
+
+ 
+
+
+How to switch or checkout between branches
+==========================================
+ The star * next to master indicates the branch that we are working with, so our next step is to swith over to 'new-branch', or in Git Terminology, we want to checkout to 'new-branch' branch.
+ So to do that we use the following command: 
+
+ $ git checkout my-new-branch
+Switched to branch 'my-new-branch'
+
+Alright now we are working with the brand new 'my-new-branch'. Back in our text editor and open up our HTML, right after the opening <body> tag, let's create a <ul> with 10 list items <li>.
+Let's start with 4 and check out the browser, we're done for the day, and we want to commit our changes before heading out: 
+
+1. git status
+2. git add -A
+3. git commit -m 'Counted to 4.'
+
+Next morning, we want to finish something on the master branch, so we can switch back to our master branch like this:
+
+4. git checkout master
+
+Now that we are on master branch, we see that the 'my-new-branch' work, 'Count to 4' is gone, because it only exists on that 'my-new-branch'.
+After a while we want to go back and keep working on our 'my-new-branch' work. So we switch back to 'my-new-branch'
+
+5. git checkout my-new-branch
+
+We see that our list is back in the browser, then start counting again, till 7 this time. That's all we can do for that day, so we want to add everything to the staging area and then commit
+
+6. git add -A
+7. git commit -m 'Counted to 7.'
+
+The next morning we can still work on that counting project, and this time we have time to finish it. So let's go ahead and commit those changes
+
+8. git add -A
+9. git commit -m 'Completed Counting project'
+
+Now that our Code is no longer a working progress we can merge it into our *master branch, so let's switch to our master branch
+
+10. git checkout master
+
+Obviously the 'Counting project' does not exist yet, but we can add it with Git merge feature. We want to add my-new-branch to *master branch
+
+11. git merge my-new-branch
+
+Now the 'Counting project' is in the master branch. Now we want to push the 'master branch' to Github to see all the commits
+
+12.(master) git push origin master
+
+Let's take a look at our Repo on Github, if we click on 'commits' we see all the commits we made. All the commits we made in 'my-new-branch' were not at the begining, part of the commit history of the *master branch until we performed the 'merge', and this is how things are done through the command line.
+But there is another way to merge a branch, we can also do that through GitHub itself, and have it done for us. So let's create a brand new branch from the cmd line: 
+
+13. git branch count-to-fifteen
+
+and let's switch over or checkout to that new branch....and work on it by counting till 15 in our HTML file
+
+14 git checkout count-to-fifteen
+
+For some reasons, we cannot finish but still want to Stage and commit our changes. Here's a little tip to stage and commit in one line
+
+15. git commit -am 'Counted to 13.'     
+
+And we can also eventually push this individual branch up to our GitHub repo like this
+
+16. git push origin count-to-fifteen
+
+Now from Github, we can switch branches, by clickin on 'commits' and from the drop menu switch from *master to 'count-to-fifteen' branch now we can see our work and our latest commits.
+
+So now let's jump back to our editor to complete that feature in our HTML file, and then commit our changes
+
+17. git commit -am 'Completed the count to 15 feature'
+
+Now that feature is ready to be merged into the 'master branch', and let's GitHub handling the merging
+
+18. git push origin count-to-fifteen
+
+From our GitHub repo home page, we see that a new row, with a new message have been added saying: 
+
+You recently pushed branches with on the far right a 'Compare and pull request' button. Let's go ahead and click that button. On the next screen, we'll be creating a 'pull request', which is basically requesting the merge of a branch into another. With the possibility of writing a message to our team mates, and then assign it to someone on the team, that way it allows us to do some kind of code peer review, and make sure that everything looks good before merging that branch into master branch.
+So click on assignees and assign it to someone and then click on the button 'Create pull request'. Then on the next page, is a review of what the request is about and made of...."JohnDoe wants to merge to commits into master from count-to-fifteen"
+Next we have the authority to scroll down and click on 'Merge pull request' button, and then 'Confirm merge' button....
+We then should see the following : Pull request successfully merged and closed
+
+We also see a 'Delete branch' button on the right. Once the merging has been performed on the master, there's no need to keep that branch around, it's also a good practice to keep the repo clean.
+
+Back in the cmd line, we 'git checkout master' we notice that the merge has only occurred on the GitHub servers, so what we need to do is Pulling in the latest copy of 'master' from GitHub down to our local machine
+
+19. git pull origin master
+
+And now our local machine has the latest copy with the latest code. Let's keep our local repo clean as well
+Let's list our branches, and delete the branches we don't need anymore.
+
+20. git branch
+	count-to-fifteen
+	my-new-branch
+	*master
+
+21. git branch -d count-to-fifteen
+Deleted branch count-to-fifteen 
+
+To Conclude let's commit our changes
+
+22. git commit -am 'Removed local branches'
+
+
+A tip to create a new branch and switch over to it in 1 move? 
+
+23. git checkout -b our-features                 <-- -b for branch
+Switched to a new branch 'our-features'
+
+
+Now we're ready to work on 'Our Features' section.
+
+
+
+
+
+
+
