@@ -1,0 +1,72 @@
+Overview
+********
+We dive in from where we left off, enhancing 'Our features' layout for small screens. 
+The next adjustments that we should make for small screens is , to let the <p> content uses it full available width, and stacks the corresponding Icon above it.
+So to make that change, let's jump over our '_feature-item' CSS file , and modify that 'padding-left: 94px' applied to certain sizes or larger.
+So let's cut that line and create a media query and @mixin atSmall, and paste that value back in, then check in the browser if that does the trick, well it does. 
+
+
+	.feature-item {
+	position: relative;
+	padding-bottom: 2.5rem;
+
+	@mixin atSmall {
+		padding-left: 94px;
+	}
+
+
+Now we need to tell small screens to stop positionning icons 'ABSOLUTELY'. 
+So within the icon rule, let's cut both of these lines 'position: absolute' and 'left:0;' and create a @mixin atSmall, paste those lines back in, and check in the browser; Alright, it looks better now. 
+
+	&__icon {
+		
+		@mixin atSmall {
+			position: absolute;
+			left: 0;
+		}
+	}
+
+
+
+The Icon centered would look better though. So within the Baseline style of the '&__icon' rule, let's say 'display: block;' and 'margin: 0 auto;'
+
+	&__icon {
+
+		display: block;
+		margin: 0 auto;
+		
+		@mixin atSmall {
+			position: absolute;
+			left: 0;
+		}
+	}
+
+We check in the browser, perfect. Now we should reduce the font-size of our <h3> element, and also reduce its Top margin for small screens, so within our CSS file, let's look for the '&__title' rule for that element, then cut the font-size property and place it in a @mixin atSmall media query, and then set the baseline font-size to 1.6rem; instead and check in the browser; That looks better.
+
+	&__title {
+		font-size: 1.6rem;
+		font-weight: 300;
+		margin-bottom: .8rem;
+
+		@mixin atSmall {
+			font-size: 1.875rem;
+		}
+
+Now let's reduce the Top margin, just a tiny bit, so back in our CSS, and add to the '&__title', the property of 'margin-top: .7rem;' and within our @mixin atSmall let's reset it to 'margin-top: 1rem;' Check in the browser and indeed that looks much better.
+
+	
+	&__title {
+		font-size: 1.6rem;
+		font-weight: 300;
+		margin-top: .7rem;
+		margin-bottom: .8rem;
+
+		@mixin atSmall {
+			font-size: 1.875rem;
+			margin-top: 1rem;
+		}
+
+Next why don't make all of those titles centered for small screens, but keep them left-aligned on larger screens? 
+So within our '&__title' rule let's add as our baseline a 'text-align: center;' and within our @mixin a 'text-align: left;' and then check in the browser. Should look Nice!! 
+
+Now the styling for this 'Our features' is complete for large and small screens. Let's change gear and talk about Git Branch Merging. 

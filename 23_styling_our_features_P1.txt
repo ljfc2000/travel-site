@@ -1,0 +1,208 @@
+Overview
+********
+Continuing styling our travel-site website. We'll be working on the 'Our Features' section.
+The First thing that we want to work on is the main title: 'Our features'. So Back in the HTML file, let's look for that element. We want to create a brand new block for this element, by giving it a class name = "section-title", and then create a new CSS file within the 'modules' folder, and name it '_section-title.css' in order to write a new CSS class. But before we forget, let's open up our main 'styles.css' file, and import that brand new file.
+
+What CSS should we write? The first thing that we notice comparing our browser with the Design File is that:
+1. We need a much larger font-size, so if we measure the title in the Design File, it looks like we need a 60px tall letter. We want that in 'rem', so (60/16=3.75rem).
+2. We also notice that only the word 'features' should be bold. So let's first lower the font-weight to 300 first, and then within our HTML, let's wrapp that word in a <strong> tag. Well after checking out in the browser, we don't see that much difference between regular font and bolded one. So in our CSS file, let's write a new rule for any 'strong' tags nested that '.section-title' class should have a font-weight of 500. Then that should look better in the browser.
+3. We also want that title centered horizontally, so let's add a property of text-align: center;
+4. And we want that star * next to it. So back to our HTML, let's cut and paste that star image, into that <h2> title heading, right before the Text. That should do the trick.
+Let's give that star image element a class, so we can give it some right margin, and then increase the space between the Icon and the Text. So in our HTML file, let's write that class="section-title__icon", underscore twice indicates, that icon is an element of section-title block. Then back in our CSS file, let's create a new rule that gives that margin-right to that element, by writing '&__icon', and giving it a little bit of margin of '.5rem;'. 
+Now our title section or element is complete. Looks good. Next thing that we need to do, is working on those 2 column layout.
+	
+
+
+
+	.section-title {
+		font-size: 3.75rem;
+		font-weight: 300;
+		text-align: center;
+
+		strong {
+			font-weight: 500;
+		}
+
+		&__icon {
+			margin-right: .5rem;
+		}
+
+	}
+
+Note: LEVERAGE= use (something) to maximum advantage."the organization needs to leverage its key resources"
+
+
+5. Working on that 2 column layout, back in our HTML file, underneath that <h2> title element, let's create a new 
+<div> and leverage the 'row' class that we created earlier,  by typing 'div.row + hit the tab key' to activate the Sublime Text Snippet. That way we can create a 2 column layout again, that uses for each of them, half of the available width of the page. So if we think in terms of a 12 column grid bars, that means that each column should take up 6 of the 12 column grid bars. So let's create a new column in a  <div> with a class= "row__medium-6", and copy and paste it to create the second column. 
+Next let's move half of the content in the first column, and the second half inside the second column. Then back in our 'modules' folder, let's open up the '_row.css' file. Currently, this 'row' block supports a 2 column split, of 1/3rd and 2/3rd, but now we want that 'row' block to support a 2 column split of equal width. So right under the '&__medium-4' rule, let's create a new '&__medium-6' rule, that first floats to the left, and with a width of 50%.
+
+	&__medium-6 {
+		float: left;
+		width: 50%;
+	}
+
+
+In the browser, we see that gives us a 2 column layout as we expected, however we need a bit of margin or gutters between the 2 columns. Earlier when we created the 'row' block, we created a modifier class that we can place into the 'row' element, we're talking about the 'row--gutters' modifier:
+
+	<div class="row row--gutters">
+
+which does indeed add a margin between the 2 columns, but if we look at our Design file, we notice that we need an extra large gutter instead, so why don't we create a new modifier class of:
+
+	<div class="row row--gutters-large">
+
+and back in our CSS file, for the 'row' block towards to the top, right under the original '&--gutters' modifier, let's create a new one '&--gutters-large', larger of course than the original one that was equaled to 'margin-right: -65px;'. 
+Let's make the new one equals to 'margin-right: -100px;',
+
+	&--gutters-large {
+		margin-right: -100px;
+	}
+
+ and also right under the other original gutters rule '&--gutters > div', let's create a corresponding one, '&--gutters-large > div' so any direct children that are <div>, in other words each of the columns, let's give it this time a padding-right of 100px:
+
+ 	&--gutters-large > div {
+ 		padding-right: 100px;
+ 	} 
+
+ Looking good in the browser.
+
+6. The next thing that we need to work on, if we compare with our Design file, is creating a block for a specific kind of style, where the Icon sits to the left, and the corresponding text sits to the right.
+So let's create a brand new block that only applies to that first listed feature, then when we have that block working, we'll apply it to the other 3 feature items.
+So back in our HTML file, we have our first feature item composed of:
+	-icon
+	-<h3>
+	-<p>
+elements, so let's wrapp them in a new <div> with a class="feature-item".
+
+          <div class="feature-item">
+
+Next in our CSS 'modules' folder, let's first create a new file named '_feature-item.css' and then a rule for 'feature-item' class that sits the text next to the Icon, but first let's import it in our main 'styles.css' file
+
+First thing we're going to do, is giving the Icon a class, that we can target with our CSS, like 
+
+      <img class="feature-item__icon" src="assets/images/icons/rain.svg">
+	
+Then in our CSS file, let's give the Overall parent a bit of padding-left. How much should we give it? Well if we measure in the Design File, from where the Icon starts on the left edge to where the Text contents begin, it looks like 94px.
+Doing that pushes all the content in, now we can position the Icon ABSOLUTELY to sit on the Top left corner, so in our CSS file, let's select that icon and give it a position: absolute, and a left:0;
+And because we want the Icon to be positioned in relation with its parent, let's make sure to give the parent a position: relative;
+So let's save it and check out the browser, we should have the proper layout.
+		
+
+		.feature-item {
+			position: relative;
+			padding-left: 94px;
+
+			&__icon {
+				position: absolute;
+				left: 0;
+			}
+
+		}
+
+7. The Next thing we should do is working on the styling of <h3> heading. So in our HTML let's give that element a class name of 'feature-item__title'
+	
+              <h3 class="feature-item__title">We&rsquo;ll Watch the Weather</h3>
+
+Then in our 'feature-item'CSS file let's create a new rule for the font-size. If we measure in the Design File, the letters are about 30px, so (30/16= 1.875rem;), and since we're at it, let's adjust the font-weight to 300.
+
+Next let's focus on the <p> Text, in the Design File it uses a bigger font-size and a significantly higher line-heigth. Remember that earlier, we created a reusable class name 'generic-content-container', for the styling of paragraphs elements. So we can apply it to 'Our features' section, by heading over our HTML file, on the main 'row' <div> , let's apply that class like this:
+
+      <div class="row row--gutters-large generic-content-container">
+	
+Save it. That looks a lot better in the browser. But we notice that compared to the Design File, the font-weight is a bit higher, so let's open the 'generic-content-container.css' file, and within the rule that selects all paragraphs, let's add a font-weight: 300;
+
+	.generic-content-container {
+
+	p {
+		font-weight: 300;
+		line-height: 1.65;
+		margin: 1.8rem 0;
+
+Next let's reduce the space between the title and the paragraph. So do that lets take 2 steps. First lets' adjust our '.generic-content-container', and tell paragrahp to not have any Top margin. So within that margin line, let's add a couple of 0 0, that way we're zeroing out all of the margins, except the bottom margin.
+
+	.generic-content-container {
+
+	p {
+		font-weight: 300;
+		line-height: 1.65;
+		margin: 0 0 1.8rem 0;           <-- Top, Left, Bottom, and Right margin values
+
+So now with this in place we are now able to reduce the bottom margin of this title. So within our '_feature-item.css' file we can add a margin-bottom of .8rem; to the '&__title' rule, that way that should reduce the spacing and matching the design.
+
+
+	&__title {
+		font-size: 1.875rem;
+		font-weight: 300;
+		margin-bottom: .8rem;
+	}
+
+Now the styling is complete, we should apply it to the 3 other feature items. So in our HTML file let's wrapp those elements in <div> Tags with the class name of 'feature-item'.
+We also gave a class name to our Icon element, so let's apply it to the rest of the icons by copying and pasting that class as well.
+
+          <img class="feature-item__icon" src="assets/images/icons/fire.svg">
+	
+We also added a class name to the <h3> element, so we need to apply it to all of them like this: 
+
+          <h3 class="feature-item__title">Survival Kit</h3>
+
+Looks good in the browser. Next thing that we need to to is to add a little bit of vertical spacing between items, it looks like that they are too close to each other.
+
+So let's jump over our 'feature-item.css' file, and within the main rule let's add some padding-bottom like this: 
+
+	.feature-item {
+	position: relative;
+	padding-left: 94px;
+	padding-bottom: 2.5rem;
+
+We're done with the styling of that section. Now let's look what it looks like on smaller screens. Well it seems that the main title font-size needs to be reduced.  
+So lets jump over our 'section-title.css' file, and let's copy our original baseline font-size in a media query @mixin at Small, and let's reduce the baseline to 2.55rem instead of 3.75rem;
+
+	.section-title {
+	font-size: 2.55rem;
+	font-weight: 300;
+	text-align: center;
+
+	@mixin atSmall {
+		font-size: 3.75rem;
+	}
+
+
+Looks good. Next let's reposition the star * on its own line. So back in our '_section-title.css' file let's tell the '&__icon' rule, to our baseline style to make that element a block level element, to drop the Text after it onto a new line, and make sure that it stays horizontally centered by saying margin-left: auto and margin-right: auto; as well.
+
+	&__icon {
+		margin-right: .5rem;
+		display: block;
+		margin-left: 0;            <-- Obviously these 2 margins will conflict with the first one
+		margin-right: 0;
+	}
+
+We only want to use this following property margin-right: .5rem; if screens are certain screens or larger, so let's cut this line and start a media query @mixin atSmall and past that property in there. Then let's offset that margin-left to 0, and also tell the icon to be an inline element so on larger screens it won't drop the Text on a new line
+
+	&__icon {
+		display: block;
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	@mixin atSmall {
+		margin-right: .5rem;
+		margin-left: 0;
+		display: inline-block;
+	}
+		
+
+Looking good...but we need some vertical margin between the Icon and the text, so why don't we say within our baseline style by typing margin-bottom: .6rem; just a bit more than half of a rem; and we want to undo that for larger screens by saying margin-bottom: 0; within the @mixin like this:
+
+	&__icon {
+		display: block;
+		margin-left: 0;
+		margin-right: 0;
+		margin-bottom: .6rem;
+	}
+
+	@mixin atSmall {
+		margin-right: .5rem;
+		margin-left: 0;
+		margin-bottom: 0;
+		display: inline-block;
+	}
+		

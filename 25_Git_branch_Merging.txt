@@ -1,0 +1,109 @@
+Overview
+********
+Git Branch Merging . Now we're going to commit our changes in the command line.
+
+1. Let's run a 'git status' to see what has changed:
+----------------------------------------------------
+
+$ git status
+On branch our-features
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   app/assets/styles/modules/_generic-content-container.css
+        modified:   app/assets/styles/modules/_row.css
+        modified:   app/assets/styles/styles.css
+        modified:   app/index.html
+        modified:   app/temp/styles/styles.css
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        app/assets/styles/modules/_feature-item.css
+        app/assets/styles/modules/_section-title.css
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+2. Let's add them ALL to the Staging Arew
+------------------------------------------
+3. Then commit with a little message:
+-------------------------------------
+
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git_Dev/Projects/travel-site (our-features)
+
+$ git commit -m 'Completed "Our Features" section.'
+
+[our-features ad28020] Completed "Our Features" section.
+ 7 files changed, 216 insertions(+), 21 deletions(-)
+ create mode 100644 app/assets/styles/modules/_feature-item.css
+ create mode 100644 app/assets/styles/modules/_section-title.css
+
+ 4. Now that we've committed those changes to our 'our-features' branch, the next thing that we want to do is merge that branch back into the 'master'. So we checkout or switch to the 'master' branch:
+ --------------------------------------------------------------------------------------------------------------
+
+ lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git_Dev/Projects/travel-site (our-features)
+$ git checkout master
+
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git_Dev/Projects/travel-site (master)
+$
+
+5. Now that we have checked out to the master branch let's open a new tab (Alt + F2) and fire up the 'gulp watch' and open up the browser, we'll see that 'Our features' section has none of our progress, because that Code lives only in the 'our-features' branch, so we need to 'merge' that branch into the 'master'.
+------------------------------------------------------------------------------------------------------------------
+
+Back the command line, we'll merge 'our-features' with a new option called '--no-ff= No Fast Foward'
+
+Vim editor opens up with a little message that we can keep as is telling us that the merge is about to happen, Save and Quit with :wq
+
+Merge branch 'our-features'
+
+# Please enter a commit message to explain why this merge is necessary,
+# especially if it merges an updated upstream into a topic branch.
+#
+# Lines starting with '#' will be ignored, and an empty message aborts
+# the commit.
+
+-------------------------------------------------------------------------
+
+$ git merge our-features --no-ff
+
+Merge made by the 'recursive' strategy.
+ app/assets/styles/modules/_feature-item.css        | 40 +++++++++
+ .../styles/modules/_generic-content-container.css  |  3 +-
+ app/assets/styles/modules/_row.css                 | 15 ++++
+ app/assets/styles/modules/_section-title.css       | 29 +++++++
+ app/assets/styles/styles.css                       |  4 +-
+ app/index.html                                     | 49 +++++++----
+ app/temp/styles/styles.css                         | 97 +++++++++++++++++++++-
+ 7 files changed, 216 insertions(+), 21 deletions(-)
+ create mode 100644 app/assets/styles/modules/_feature-item.css
+ create mode 100644 app/assets/styles/modules/_section-title.css
+---------------------------------------------------------------------------------------
+
+6. Now we are ready to push up to Github
+-----------------------------------------
+
+$ git push origin master
+
+Counting objects: 48, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (42/42), done.
+Writing objects: 100% (48/48), 8.48 KiB | 0 bytes/s, done.
+Total 48 (delta 22), reused 0 (delta 0)
+remote: Resolving deltas: 100% (22/22), completed with 6 local objects.
+To https://github.com/ljfc2000/travel-site.git
+   4e85845..97693ff  master -> master
+
+Now if we checkout Github.com, open up our repo and click on 'commits', we'll see not only our 'commit' with our message when we commpleted 'Our features' section, and because we used the '--no-ff' No Fast Foward option, we see a 'Dedicated commit' just for the merge. If we click on that 'Dedicated commit', we see the diff, basically what changed in which files when we performed the merge.
+
+Note: the 'No Fast Foward' option creates a Dedicated commit in the repo's history which is a consolidated place to see all of the changes in all of the commits for that branch.
+
+
+
+
+
