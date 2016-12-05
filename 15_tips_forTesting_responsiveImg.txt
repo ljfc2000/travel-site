@@ -1,0 +1,49 @@
+Overview
+********
+Quick tips for Experimenting with Responsive Images.
+
+First Tip:
+==========
+
+1. Let's use the 'large-hero' image as an example
+2. And we're testing the responsiveness of our images while shrinking the size of the window
+3. We can see that it's not very difficult to see when the image Snaps to a new image
+4. But some other time it is not so clear
+5. The issue here is that you want to know exactly what picture you're looking at
+6. So that's why in our images/folder, we can see that, for each image there's a matching one ending with -i
+7. The -i stands for "information", so you can create copies and see when an image is being Used
+8. So in our 'index.html' file, we can edit our images and use those with '-i' ending like this
+9. <source srcset="assets/images/hero--large-i.jpg 1920w, assets/images/hero--large-hi-dpi.jpg 3840w" media="(min-width: 1380px)">
+10 Back in the browser, let's test it
+11 Now we can see the '-i' images with their width and a light black overlay
+12 Right now it is perfectly clear when images are swapping back and forth
+
+
+Second Tip:
+===========
+
+1. Simulating and Testing different pixel densities
+2. In our browser we can see that we're using the large crop (1920px wide x 654px tall)
+3. Which matching with what we have in our HTML file
+4. But remember that we also included a 'hi-dpi' version of (3840px)
+5. Depending on the monitor but the browser is intelligent enough to not Use that version
+6. But as a developer you want to see all Images in Action
+7. So How can we test and see those 'hi-dpi' images in our browser?
+8. Well Google chrome has amazing Developer tools
+9. In Chrome we can right click and chose 'Inspect'
+10 That will open the Developer tools window
+11 Click on the Top left corner the 'togle device mode' icon
+12 On the Top of the window we can see a few options
+13 Chrome can EMULATE different devices like Galaxy S5, or iPhone 6, etc...
+14 In our situation what we want to do is set it to 'Responsive'
+15 Remember that our goal is to Simulate different size densities
+16 To do that click on those 3 dots in the Top Right corner
+17 And select 'show device pixel ratio'
+18 A new option appears on the screen named 'DPR 1.0' that stands for 'Device Pixel Ratio'
+19 Let's jump in our HTML file and make sure for instance that both of our Large crops are using the '-i' versions
+20 Then Save our file
+21 By default we're using a 'DPR 1.0', so let's simulate a screen that has a higher pixel density 'DPR 2.0'
+22 And Refresh the page, the browser should realize that the image that is needed is Double Size now
+23 We are also reassured that we didn't include a typo in our 'hi-dpi' file for instance
+24 So Chrome can help us Testing devices with different characteristics.
+25 Now we can remove those '-i'

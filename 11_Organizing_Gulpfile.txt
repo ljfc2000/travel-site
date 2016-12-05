@@ -1,0 +1,65 @@
+Overview
+*********
+In order to stay organize with our code, we're going to break up this gulp file into several smaller
+highly focussed files.
+
+So what should we do First?
+===========================
+Let's make our first job to pull out any of the code in this file that is responsible
+for our CSS Tasks.
+And then let's move that code into its own separate file.
+
+1. In the root of our Project file folder
+2. Let's create a brand new Folder named gulp
+3. Whithin that 'gulp' folder let's create a new folder named 'tasks'
+4. Whithin that 'tasks' folder let's create a new file named 'styles.js'
+5. Back in our 'gulpfile', let's move our 'styles tasks' out of that main file
+6. And paste it into our new dedicated 'styles.js' file
+7. Now we need to make sure that any of the variables used in that code are 
+   defined at the Top of this 'styles.js' File
+8. So if we take a close look, 'styles.js' file needs to know what are:
+	-gulp
+	-postcss
+	-autoprefixer
+	-cssvars
+	-nested
+	and 
+	-cssImport
+
+9. From the main file we can remove all those variables that deal with 'postcss'
+10 From the time being 'styles.js' file is complete.
+11 From that same 'tasks' folder let's create a new folder named 'watch.js'
+12 Now we are going to do the same, meaning move every single 'watch task' inside
+   our brand new 'watch.js' file.
+13 So back in our main 'gulpfile.js', let's cut the entire 'gulp watch task' and 
+   paste it in 'watch.js'
+14 And let's also grab the 'cssInject task'
+15 We need to make sure to copy the variables used for:
+	-gulp
+	-gulp-watch
+16 Back in our main 'gulpfile.js' file, let's see what's left:
+	-we have 2 dummy tasks that we don't really need 
+	 anymore, but we can leave them as is or delete them
+	-And we need to cut as well the 'browserSync' variable into our 'watch.js' file
+
+17 Back in our main 'gulpfile.js' file, there shouldn't be any code left in that file
+   We don't even need to know what:
+   	-var gulp = require('gulp') is
+   	or what
+   	-watch = require('gulp-watch') is;
+   So now we have a completely EMPTY 'gulpfile.js' file
+
+18 But it won't stay empty that long, because we want to import the dedicated
+   'tasks' file that we just created
+19 So let's first import the 'styles.js' file with require() function; No extension NEEDED
+	require('./gulp/tasks/styles');
+
+  Then let's import our 'watch.js' file as well with require() function
+  	require('./gulp/tasks/watch');
+
+20 Now from the cmd line, let's take our 'gulp watch' for a Spin, type in:
+
+	~ gulp watch
+
+   And it should work like a Charm.
+

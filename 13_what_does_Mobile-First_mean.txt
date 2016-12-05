@@ -1,0 +1,156 @@
+Overview
+********
+
+Mobile-first can mean different things in different contexts
+=============================================================
+What does Mobile-first means? We can answer that question with 2 other questions:
+
+	-What is responsive web design?
+Let's imagine a responsive web site, so the layout and content of that hypothetical page are optimized for the size of the device that is viewed in it like: 
+	-3 column layout for a desktop
+	-2 column layout for a tablet
+	-1 single column for a smartphone
+
+Which means that we would build the desktop layout first and then adapt to a smaller and smaller screen and that's the Direction that we would take.
+But 2 major factors in the Web community made that approach change and reversed it. And started building the opposite direction.
+What were those 2 factors? and - What are the shortcomings of traditional responsive web design?
+
+	-Factor#1 We witnessed Way way more traffic from Mobile devices than traditional desktops and laptops.
+	 and our primary source of traffic should not be an afterthought.
+	
+	-Factor#2 We realised that traditional 'desktop-first' responsive design resulted in bloated, and slow
+	 loading websites. Eventhough we adapted the layout for different size monitors, we were forcing small 
+	 devices to download Huge data that were designed for desktop monitors.
+     The key concept of that is we don't want anyone to have to download extra data that won't even use.
+     We want to build Mobile-first, efficient websites that load as quickly as possible for everyone.
+
+So what are the different contexts? 
+
+Design Context:
+-Building around a smaller screen first
+-Which forces us to prioritize the content we want showcase
+-That makes us Anticipating most common actions user would take
+-And people that are involved are Information architects, graphic
+ designers, and usability experts.
+
+
+Development Context:
+-Is coding a certain way so devices don't download unecessary date
+-As a mobile-first developer, we treat the most essential view of 
+ our website as our baseline and code upwards from there.
+-And we make the site load quickly for everyone.
+
+How does Mobile-first phylosophy applies to our travel-site?
+============================================================
+In the real world not all projects include a Mobile-View design comp. So even if we are only given a desktop design comp, there is no reason to not make every website you develop a mobile-first website view first.
+So eventhough we're not always working in the ideal situation, we are not going to let anything get in the way of building a website that loads quickly on all devices.
+
+So where do we begin with Mobile-first development? 
+
+Best practices, there are things that we can do in 
+
+-HTML
+-CSS
+-JavaScript
+
+An the first thing that we are going to work on is CSS:
+
+	1. Make sure that 'gulp watch' is Running
+	2. Earlier when we Edited our 'large-hero' block, that was from a desktop perspective
+	3. And if we start shrinking our browser, we see right away the font-size is way to big for a smart phone
+	4. So let's edit our CSS, and open our '_large-hero.css' file, to take care of the title first
+	5. Remember that in the Mobile-first philosophy, mobile is our baseline
+	6. So we need to change that font-size to something smaller first and then adapt for larger screens
+	7. font-size: 1.1rem;
+	8. And then we could write a media query, for 530px or larger screen like that:
+
+	   @media (min-width: 530px) {
+	   	font-size: 4.8rem;
+	   }
+		and Save the file right?
+	9. Now we can see that the site is using 'font-size: 1.1rem;' as a baseline, and gets bigger and bigger if we  		   maximize the window
+	10 But Actually, theres is a 'postcss' trick that can make @media query, much easier
+	11 It's called 'Mixins', and we need to configure our CSS to support it
+	12 So we stop the 'gulp watch', and want to use NPM to install 'Mixins' package
+	13 $ npm install postcss-mixins --save-dev
+	14 In our 'gulp folder' then 'tasks' folder let's open our 'styles.css' file
+	15 And let's create a new variable, and import 'postcss-mixins' package
+	16 mixins = require('postcss-mixins');
+	17 In our postcss filters let's add mixins
+	18 .pipe(postcss([cssImport, mixins,  cssvars, nested, autoprefixer]))
+	19 Make sure that 'gulp watch' is Running and save 'styles.css' file
+	20 Then let's create a new 'mixins' that works with @media query throughout the entire website
+	21 Since 'mixins' is like reusable code, we don't want to store 'mixins' in our 'large-hero' block file
+	22 Instead from app/assets/styles/base folder, let's create a new file named '_mixins.css'
+	23 And inside that file let's define a 'mixin' and give it a name atSmall
+	24 Then we declare our media query selecting only  screens that are 530px or larger,
+	   and what should we place in that @media query? @mixin-content
+	
+	25 @define-mixin atSmall {
+		@media (min-width: 530px) {
+			@mixin-content;
+	}
+
+}
+
+ 	26 We Save that file, then before using it we need to Open our main 'styles.css' and import that '_mixins' file
+ 	27 @import "base/_mixins";
+ 	28 So now we can access '_mixins' from any of our Files
+ 	29 Let's take care of our subtitle and use '@mixin'
+ 	30 &__subtitle {
+		font-weight: 300;
+		color: $mainBlue;
+		font-size: 1.1rem;
+		margin: 0; 
+
+
+		@mixin atSmall {
+			font-size: 2.9rem;
+	}
+
+	31 Now to make things clearer, let's create 2 other '@mixin' atMedium and atLarge with different (min-width)
+
+	/*Defining another mixin for Medium screens*/
+	@define-mixin atMedium {
+		@media (min-width: 800px) {
+			@mixin-content;
+		}
+	}
+
+
+	/*Defining another mixin for Large screens*/
+	@define-mixin atLarge {
+		@media (min-width: 1200px) {
+			@mixin-content;
+		}
+	}
+
+
+	31 And now let's use our 3 'mixin' on that top 'your clarity' heading
+	32 So back in our 'large-hero' file, let's take a look at the rule for 'title'
+
+		&__title {
+	font-weight: 300;
+	color: $mainBlue;
+	margin: 0; 
+	font-size: 1.1rem;         <---- Baseline font-size for super tiny screens
+
+	@mixin atSmall {
+		font-size: 2rem;       <---- Size of 2rem atSmall screens
+	}
+
+	@mixin atMedium {
+		font-size: 3.2rem;     <---- Begining at the size of Medium font-size = 3.2rem;
+	}
+
+	@mixin atLarge {
+		font-size: 4.8rem;     <---- And at Large Desktops size = 4.8rem;
+	}
+	
+ }
+
+
+ 	33 So this is 'Mobile-first' CSS pattern, we start with a Baseline font-size = 1.1rem; that we want all 
+ 	   screens to receive, including super tiny screens, and we modify font-size for larger and larger screens
+ 	   progressively
+

@@ -1,0 +1,79 @@
+Open web browser: 
+git-scm.com
+Install then Open Git Bash
+From cmd line type in: 
+~ git --version
+to check out if Git is properly installed.
+
+Then configure your name and email address with:
+~ git config --global user.name "Luke"
+~ git config --global user.email "ljfc2000@yahoo.com"
+
+Now Git is configured , make a "Projects" Directory, and within that same Dir create another one 
+mkdir "Hi There"
+and cd to it in order to create a Repo, or Drag the Folder into your command line.
+
+Then to create Repo type in: 
+~ git init
+Next let's create an index.html file inside
+~ touch index.html
+And let's add some content to it, then in command line type in:
+~ git status
+=====================================================================
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Projects/Hi There (master)
+$ git status
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        index.html
+
+nothing added to commit but untracked files present (use "git add" to track)
+======================================================================
+Next we want to Stage our File with the following command:
+
+~ git add index.html
+~ git status
+======================================================================
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Projects/Hi There (master)
+$ git status
+On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        new file:   index.html
+========================================================================
+Then we want to commit with a little message: 
+
+~ git commit -m 'This is my commit.'
+========================================================================
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Projects/Hi There (master)
+$ git commit -m 'This is my first commit on November 1st!'
+[master (root-commit) e78841c] This is my first commit on November 1st!
+ 1 file changed, 10 insertions(+)
+ create mode 100644 index.html
+========================================================================
+Now commit has been Done...If something happens to the File, type in the following command to Restore it to the way it was:
+
+~ git checkout -- .
+
+========================================================================
+Most of the Time, instead of Creating Brand new Repos, we usually Clone or Copy a Repo to our Hard Drive from a Server. So let's go back to our Projects Folder.
+And let's clone one from a URL location:
+
+~ git clone https://github.com/LearnWebCode/welcome-to-git.git
+========================================================================
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Projects
+$ git clone https://github.com/LearnWebCode/welcome-to-git.git
+Cloning into 'welcome-to-git'...
+remote: Counting objects: 9, done.
+remote: Total 9 (delta 0), reused 0 (delta 0), pack-reused 9
+Unpacking objects: 100% (9/9), done.
+=========================================================================
+

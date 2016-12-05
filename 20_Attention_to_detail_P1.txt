@@ -1,0 +1,102 @@
+Overview
+********
+Continuing styling our page, let's add some marging between those 2 sections. In our HTML file let's look for that first image right under that heading 'Ever since....'. Once found we want to add some bottom-margin to that element.
+We know that this image lives in its own <div> and wrapper class, so let's add another modifier to that <div> like this with a 'wrapper--b-margin' and then create a new rule for that modifier class in our 'wrapper.css' file like this 
+
+&--b-margin {
+	margin-bottom: 3.875rem;                     <--- which is 62px/16px=3.875rem (62 coming from Design File)
+
+}
+
+Then let's check in the browser and then on a small screen. It looks ok on larger screen but way too much spacing in 'Mobile view'. So to fix this little issue let's wrapp our margin-bottom in a @media query like this: 
+
+&--b-margin {
+	
+	margin-bottom: 1rem;                         <-- as our Baseline margin-bottom
+
+	@mixin atSmall {
+		margin-bottom: 3.875rem;
+	}
+}
+
+and then check in the small browser, and it looks much better.
+
+Next we want to finetune the exact width of our 2 columns. Our first column (image) whose width=33.33% in our CSS file seems a little bit narrower compared to the one in the Design File, so let's add a few modifier classes to adjust the width distribution of these columns, we want the first column to be a bit wider and the 2nd one a little bit smaller. In our HTML let's find the 1st column (image) and the 2nd one, and add them a modifier like this: 
+
+	<div class="row__medium-4 row__medium-4--larger">
+
+	<div class="row__medium-8 row__medium-8--smaller">
+
+Save the file and open the '_row.css' file, and underneath &__medium-4 let's create a new rule and increase the width like this:
+
+	&__medium-4--larger {
+		width: 37%;                   <-- instead of 33.33%
+	}
+
+and create a new rule underneath &__medium-8 like this: 
+
+	&__medium-8--smaller {
+		width: 63%                     <-- instead of 66.66%
+	}
+
+We used modifiers to do the job because later on in the 'Testimonial Section', we have 3 columns of 33.33% so that's why we want to keep that rule in place.
+
+Next thing that we want to address is the max-width that we gave our wrapper element, so back in our 'wrapper.css' file, we gave our element a 'max-width=1200px;' and we also gave and globally applied 'box-sizing: border-box' to every single element on the page, and by doing that we automatically decreased the 'max-width' of our columns by 36px (padding-left: 18px + padding-right: 18px), so to keep up with details, we are going to add 36px to our max-width=1236px; and give our Design a little bit of extra room to breathe.
+
+Our next task will be to make our image responsive. When we look at the image on a large screen, the cropping ratio looks Ok, however on a smaller screen, the image would look better if it was not as tall, and would be better as Landscape instead of portrait.
+So over our HTML, let's find that image and delete the line, and start fresh with a <picture> element instead. Within that new element, let's start with the smallest image first from the assets/images folder. There's one in there that we can pick for that purpose.
+
+		  <picture>
+            <img src="assets/images/our-start-landscape.jpg" alt="Our founder, Jane Doe">
+          </picture>
+
+Let's check in the browser; It looks much better on a smart phone, however looks really Odd on a large screen. So to fix this issue, within our <picture> element, let's add a new <source> element and create a new 'media' query that says if a screen is larger than 800px, use a different image source by using 'srcset="assets/images/xx.jpg"'   
+
+
+		<picture>
+			<source srcset="assets/images/our-start.jpg" media="(min-width: 800px)">
+            <img src="assets/images/our-start-landscape.jpg" alt="Our founder, Jane Doe">
+        </picture>
+
+Now both pictures look great on small and larger screens. But what about Medium size screens? If we shrink our window to medium size, we see that the image is odd and should be narrower and taller instead. In our images folder
+we actually have one image that is cropped that way. So let's fix that issue and a new source and new widths: 
+
+		<picture>
+			<source srcset="assets/images/our-start.jpg" media="(min-width: 1020px)">
+			<source srcset="assets/images/our-start-portrait.jpg" media="(min-width: 800px)">
+            <img src="assets/images/our-start-landscape.jpg" alt="Our founder, Jane Doe">
+        </picture>
+			
+Let's check in the browser; and indeed that issue is fixed, our image is now responsive. One last thing that we want to do is add images with 'hi-dpi' copies for each cropping. And we also need to tell the browser the size of those images, so it knows which one to use. Working our way down, we need to change 'src' to 'srcset' in order to add an additional image.
+
+		<picture>
+			<source sizes="404px" srcset="assets/images/our-start-i.jpg 404w, assets/images/our-start-hi-dpi-i.jpg 808w" media="(min-width: 1020px)">
+			<source sizes="320px" srcset="assets/images/our-start-portrait-i.jpg 382w, assets/images/our-start-portrait-hi-dpi-i.jpg 764w" media="(min-width: 800px)">
+            <img srcset="assets/images/our-start-landscape-i.jpg 800w, assets/images/our-start-landscape-hi-dpi-i.jpg 1600w" alt="Our founder, Jane Doe">
+        </picture>	
+
+Note: We use 'sizes' attribute to tell the browser not to use Full width images systematically, because this is not the case here. The image that we're dealing with here, is never going to display larger than 404px thanks to our CSS, the web browser is not intelligent enough to figure that out on its own; so we can tell the web browser what size the image will be rendered at, by adding the 'sizes attribute' with the value we want to.
+The only time we don't need to add the 'sizes attribute', is when the image collapses in one single layout column view for smaller screens, because in this instance it's Ok that the browser assumes that the image needs to take up the full width of the browser. 
+
+Now we are done with that image, so let's make responsive the 'couple image' named 'first trip' in our image folder.
+For that particular image, we see that we have 3 different ones: standard, hi-dpi, and low-res for smaller screens.
+All of those images are cropped exactly the same, so in our HTML file, we do not need the <picture> element, because we only need to switch resolutions. We just change the 'src' attribute to a 'srcset' in order to add those 3 images and their width sizes with the '-i' allowing us for testing purposes, to which is being used.
+
+
+	<div class="wrapper wrapper--medium wrapper--b-margin">
+        <img src="assets/images/first-trip-low-res-i.jpg 565w, assets/images/first-trip-i.jpg 976w, assets/images/first-trip-hi-dpi-i.jpg 1952w" alt="Couple walking down a street.">
+     </div>
+
+Let's check in the browser, and see what happens. Looks Ok, but when we make our browser window larger, it makes us use the 'hi-dpi' image even though we don't have a hi-dpi monitor, so we know how to address and fix that, by adding the 'sizes attribute', and tell the browser that this image needs to be max 976px wide instead of full screen. Then we can CLEAR our cache, to see if the standard image loads instead.
+
+
+	<img sizes= "976px"src="assets/images/first-trip-low-res-i.jpg 565w, assets/images/first-trip-i.jpg 976w, assets/images/first-trip-hi-dpi-i.jpg 1952w" alt="Couple walking down a street.">
+
+
+However, on small screens now, we see that the 'sizes attribute' we just added, force even tiny smart phones to download the medium size image instead of the low resolution copy. This is because our code tells the browser that all screen sizes, need to display the image at this --> (sizes="976px") and this is not what we want.
+So to fix that, we can add a @media query that says, only for screens that are 970px or larger, the image needs to be 976px wide, otherwise for screen that are smaller than this, the image just needs to be 100% of the device width (100vw) vw stands for 'viewport width'. So for example if a small screen is 360px wide, this is our way of saying that this image needs to be that 360px wide and not higher.
+
+
+<img sizes= "(min-width: 970px) 976px, 100vw"src="assets/images/first-trip-low-res-i.jpg 565w, assets/images/first-trip-i.jpg 976w, assets/images/first-trip-hi-dpi-i.jpg 1952w" alt="Couple walking down a street.">
+
+Now if we save this file then clear our cache, we see that our 'low-res' copy is successfully downloaded instead,  which means that, this responsive image is now complete.

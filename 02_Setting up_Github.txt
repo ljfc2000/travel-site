@@ -1,0 +1,139 @@
+Creating a Github account
+Creating the Repo with our website's starter files.
+==============================================================
+1. Let's go to https://github.com
+2. Sign up for a Free personal account
+3. Public repos and config files that contain passwords Do not mix. That's why you have the option of Private accts. (Bigbucket other option available online for private repos for Free.)
+4. When you've signed up, and signed in, the next thing that we want to do is creating a brand new repo on Github Servers
+5. At the Top right corner of the layout, theres a + symbol, click on it "New Repository"
+6. Then give your Repo a Name...make sure to use dashes (-) if name is composed of several words.
+7. We can leave the Description blank, and make sure it is a Public Repo
+8. We can use that great feature "Initialize this repository with a README", but if we're importing an existing One, we don't need to
+9. Then scroll down and Click on "Create Repository"
+10 That'll take us to the Overview page of the brand new Repo
+11 At this moment this repo is completely empty, it's an empty shell on the Server that is waiting for us to PUSH something
+12 Which means that our next step is to create a New repo on our computer hard drive, and once created we can push it Up to Github.
+13 Open cmd line, and navigate to your "Projects" folder with "cd + drag folder into Terminal" or "cd" the normal way to get into "Users/"
+14 Now that we have navigated into that Directory, we can Clone a repo which will allow us to start our files
+15 Then type the following git clone cmd with the URL:
+
+~ git clone https://github.com/LearnWebCode/travel-site-files.git
+
+==================================================================
+   lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git/Projects
+$ git clone https://github.com/LearnWebCode/travel-site-files.git
+Cloning into 'travel-site-files'...
+remote: Counting objects: 83, done.
+remote: Compressing objects: 100% (76/76), done.
+remote: Total 83 (delta 5), reused 83 (delta 5), pack-reused 0
+Unpacking objects: 100% (83/83), done.
+===================================================================
+16 Now you got a new folder inside your Projects Folder, give it the same name that we gave our repo on Github with
+   "mv" cmd
+17 Next we want to PUSH that Repo up to Github Server, so "cd to your travel-site repo"
+18 But because we Cloned this Repo, by Pushing to Github would Push it to its ORIGINAL destination, and to find out about that address type in:
+
+   ~ git remote -v 
+====================================================================
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git/Projects/travel-site (master)
+$ git remote -v
+origin  https://github.com/LearnWebCode/travel-site-files.git (fetch)
+origin  https://github.com/LearnWebCode/travel-site-files.git (push)    <---Original Address of that Repo
+====================================================================
+  What we want is to Push it to our own Repo we just Created by updating the Repo URL address...so on the Overview page copy the URL address
+  and from the cmd line type in:
+
+  ~ git remote set-url origin https://github.com/ljfc2000/travel-site.git
+
+  To make sure it works type in: 
+
+  ~ git remote -v
+
+  And it actually worked properly, this is my Repo address:
+
+  lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git/Projects/travel-site (master)
+$ git remote -v
+origin  https://github.com/ljfc2000/travel-site.git (fetch)
+origin  https://github.com/ljfc2000/travel-site.git (push)
+==============================================================================
+So Now we can PUSH...with the following command: 
+
+ ~ git push origin master
+
+ lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git/Projects/travel-site (master)
+$ git push origin master
+Logon failed, use ctrl+c to cancel basic credential prompt.
+Username for 'https://github.com/': ljfc2000
+Counting objects: 83, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (81/81), done.
+Writing objects: 100% (83/83), 3.36 MiB | 78.00 KiB/s, done.
+Total 83 (delta 5), reused 0 (delta 0)
+remote: Resolving deltas: 100% (5/5), done.
+To https://github.com/ljfc2000/travel-site.git
+ * [new branch]      master -> master
+===============================================================================
+19 Now we can refresh our Github Repo page and now the repo that we set up is no longer empty, it contains the starter files that we'll be using
+20 Let's make a super basic change to the html file for instance, open the index.html in your editor
+21 Let's add a few keywords into the meta section, by adding a new little description, then Save
+22 Hope over the cmd line and type in the following cmd:
+   
+~ git status
+
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git/Projects/travel-site (master)
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   app/index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+================================================================================
+And that looks correct the only change that we made was to the index.html file, so we want to STAGE all those changes with that following cmd:
+
+~ git add -A
+
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git/Projects/travel-site (master)
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   app/index.html
+===================================================================================
+Now the File has been STAGED and it's ready to be COMMITTED with the following cmd:
+
+~ git commit -m 'Added new meta Keywords.'
+
+[master 98193c0] Added new meta Keywords.
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+====================================================================================
+Now we have updated that change into the local copy repo of our computer, so we now want to PUSH it up to Github Server with following cmd:
+
+~ git push origin master
+
+Counting objects: 4, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 411 bytes | 0 bytes/s, done.
+Total 4 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local objects.
+To https://github.com/ljfc2000/travel-site.git
+   d013c11..98193c0  master -> master
+======================================================================================
+Back to our Github page, Refresh the page and we should see our latest commit
+
+@ljfc2000 ljfc2000 Added new meta Keywords.
+
+Then we can click on "commit" link, and click on our "message" link, and Github will highlight in Green the Text we just Added. 
+And whatever happens to our computer the files are saved on Github Server
+
+
+
+
+
+

@@ -1,0 +1,41 @@
+Overview
+********
+How to prevent interrupting our Gulp watch task?
+================================================
+As an example, if we run our 'gulp watch' task from the command line, browsersync fires up our web project in the browser. Then, let's edit one of our CSS file with a variable that does not exist for instance:
+
+
+	&__text {
+		color: $aMadeUpVariable;
+	}
+
+We save the file, and in the command line 'gulp watch' throws an Error that says: Unhandled error event, because of an Udefined variable. But most importantly that error causes 'gulp watch' to stop Running as well as browsersync.
+We don't want to stop our Workflow, each time we make a syntax error.
+So in order to fix that issue, we would think that the problem is coming from our 'watch.js' file, but in reality this has nothing to do with that particular file.
+But has everything to with our 'styles.js' task file. So what we have to do, is to edit that file, and modify that 'gulp.task('styles', function) so it always ends on a positive note.
+
+So right before 'postcss' pipes to its destination, we need to add a new line. We want to use the on() function and pass as the first argument the name of the 'event' we're interested in like for example 'error' if an error occurs, 
+and what do we want to do if that happens? We want 'this' task or this stream to tell gulp or 'emit' out to gulp that it tried its Best, it tried what it could but now it is time to bring things to an end!! And that's exactly what our 
+gulp watch task is looking for....it wants to know when the task that it called  comes to an end. So as far as the gulp 
+watch is concerned, it won't even see an Error here! So if we do Run from the cmd line 'gulp watch' and edit on purpose 
+a CSS file with a new $doesNotExistVariable; 'gulp watch' will still be Running now.
+But the Problem here, is that we don't have any sort of message anymore helping us to Debugg where the error came from.
+So we need to rewrite the method down below.
+
+	.on('error', function() {
+		this.emit('end');
+	})
+
+So now between the parenthesis, of this anonymous function,  let's say function(errorInfo), we can use whatever we want of course, and within that function we want to Log into the console, any helpul 'errorInfo' message that 'gulp'
+might have for us.
+And quickly, let's point out that, this now will print out a bit of info about the 'errorInfo', but will also give us a bunch of information that we won't probably want to see.  
+So we can make the error message a bit human friendly to read, by Running the 'errorInfo' through the 'toString()' function.
+
+
+	.on('error', function(errorInfo) {
+		console.log(errorInfo.toString());
+		this.emit('end');
+	})
+
+So now if we take our gulp task for a spin, and puposely trigger an 'error' in our CSS, and then save....
+in the command line, we now can see a message indicating where the error is coming from, and our watch task is still running

@@ -1,0 +1,86 @@
+Overview
+********
+In part 2, we will fine tune the 2nd column of Text, typography. The first thing that we want to do is removing the vertical Gap on Top of that heading <h2> Here's how we got started....</h2>.
+If we look at the Design File, we see that the top of that heading should be aligned with the top of the image. Back in our browser, that vertical gap is created by the top margin on the headline so in our HTML let's find that headline so we can add a modifier class to it: headline--no-t-margin (t standing for top)
+
+	<h2 class="headline headline--no-t-margin">Here&rsquo;s how we got started&hellip;</h2>
+
+Then within our modules CSS folder, let's open '_headline.css' and scroll down to the bottom, to create a new modifier rule, that says 'margin-top: 0;'
+
+	&--no-t-margin {
+		margin-top: 0;
+	}
+
+Save the files, and let's check out the browser, that looks a lot better. 
+
+Next let's fine tuning the typography for these paragraphs underneath. If we compare with the Design File, we can see a few differences. So let's find those paragraphs in our HTML, then we need to target those elements with our CSS. So far we've been following the BLOCK ELEMENT MODIFIER methodology, and the BEM way would be to add a class to each of those 3 <p>, however we don't want to do that with repeatable instances like paragraphs. 
+So what we're going to do here, is: we'll wrapp that heading + those paragraphs in a brand new <div> with a class of "generic-content-container". Technically we could've added that new class to the existing column <div>, but for phylosiphical standpoint, in the future there might be some other contents in that column, contents that we don't want to be affected by our generic-content-container styles, so by setting up a new <div> for that class "generic-content-container", we're keeping our column flexible and future-proof.
+
+Next we need to create a new CSS file for this class name 'generic-content-container'. So within our 'modules' CSS folder, let's create a new file named '_generic-content-container.css', and a new rule that select any paragraphs nested in that <div class="generic-content-container"> element. 
+How do we want to style those <p>'s'? Let's take a look in our Design File. We can see that the spacing between each line and the line-height are bigger than usual, so let's say:
+
+	.generic-content-container {
+
+		p {
+			line-height: 1.65;           <-- line-height does not require unit of measurement
+		    font-size: 1.125rem;
+		    margin: 1.8rem 0;            <-- 0 for horizontal that stays at 0
+
+		}
+
+		p a {
+			font-weight: 700;            <-- 400 is considered as Normal or Standard
+		}
+
+	}
+Before we forget let's go in our main 'styles.css' file and import that new file. Then let's check it out in the browser.
+Then we want to give those paragraphs, a larger font size. Currently, our <p>'s', are using the browser default which is '15px', so why don't we bump them up to '18px', but we want them in 'rem' so (18/16px =1.125rem ). Save and check in the browser, looks good!!
+
+Next we should increase the margin between each pargraph, so let's say 'margin: 1.8rem 0;'. Save.
+Next thing we see in the Design File is that, the link should be bold. So in our CSS, let's create a new rule, with a descendent selector 'p a' like this, that says: any link that lives in a paragraph, within that class '.generic-content-container' should use a bold font-weight of 700. We also saw that the link should be Orange. So instead of defining that color within that same rule, we are pretty safe to define it globally.
+
+So within our 'base' CSS folder, let's open up '_global.css' file, let's create a new rule that targets all the links on the page, and gives them our $mainOrange variable.
+
+Note: After this first save, we notice that nothing happens, the color does not change. In the console '$mainOrange is not defined'. This is because of the order of the @imports in our main 'styles.css' file. 
+The '_global' file was imported before the '_variables' file where the $mainOrange lives, so '_global' has to be moved after '_variables' and '_mixins' files.
+
+Now let's see how it looks in a "Mobile-view". We can see that a little bit of vertical margin is needed between the image and the heading.
+So in our HTML, let's find the first column where our image lives, and add an extra class 'row__b-margin-until-medium', 'b' for bottom. 
+
+        <div class="row__medium-4 row__medium-4--larger row__b-margin-until-medium'">
+	
+
+Then within our 'modules' folder, let's open up the '_row.css' file, and right above that line that uses this media query @mixin atMedium, let's create a new rule that targets our new class name. The thinking behind this rule, is that when the screen is really small, let's give it a margin-bottom of 1rem, until the screen is considered large enough to be medium . Then within the media query just underneath, that is targeting Medium size screens, we can just say that this class name that we just created, should be reset to 0.
+
+	&__b-margin-until-medium {
+		margin-bottom: 1rem;
+
+	}
+
+	@mixin atMedium {
+
+		&__b-margin-until-medium {
+			margin-bottom: 0;
+		}
+
+	}
+
+We save it, and check it out in the browser; Perfect now we have a bit of vertical spacing on small screens, and we didn't create any unnecessary spacing on larger screens.
+The next thing that we notice, is that the font-size of our paragraphs on small screens are kind of large, so back in our 'generic-content-container' file why don't we use a media query @mixin atSmall that says when the screen is considered being as Small, instead of tiny or microscopic, go ahead and use that font-size of 1.125rem, and our baseline style does not need a font-size at all, because it'll just default to 1rem;
+
+Now we can save the file and check it out on Mobile.
+
+	
+	.generic-content-container {
+
+		p {
+			line-height: 1.65;
+			margin: 1.8rem 0;
+			
+
+			@mixin atSmall {
+				font-size: 1.125rem;
+			}
+
+
+And we're done with that section now.

@@ -1,0 +1,169 @@
+Overview
+********
+Update our Gulp setup to auto-refresh the web browser whenever we change our HTML/CSS files.
+In order to do this, we are going to leverage a package named 'Browsersync'
+
+Note:
+=====
+Leverage: verb Definition
+use borrowed capital for (an investment), expecting the profits made to be greater than the interest payable.
+a leveraged takeover bid
+use (something) to maximum advantage.
+the organization needs to leverage its key resources
+
+
+Starter:
+========
+Open up the cmd line and navigate to our project 'travel-site'
+Then we'll use NPM to install a new package
+Type in:
+npm install browser-sync --save-dev
+Note: This package might take a moment or 2 to download
+
+Then open up the 'gulpfile.js'
+We want to import that new package with the require() method
+But not the entire package, we want a particular method named create()
+	
+	browserSync = require('browser-sync').create();
+
+Now we want to Auto-refresh whenever we make a change to our HTML/CSS files, so that means
+that we probably want to work within our 'gulp.task(watch)' that we set up earlier.
+So within that 'gulp.task(watch...)' function, let's add a new line:
+
+	// But the first thing that we do is Initialize it by calling the 'init'
+	// method and we want to set up a few settings
+	// by telling to browserSync where our website lives
+	// we need to do that because browserSync spins up a little web server onto our computer
+	// and therefore indicate where our index.html file is
+	// so we say server and then we give a bit of information, like how the server should be set up
+	// and we say that the base directory is should simply be our 'app' folder
+
+	gulp.task('watch', function() {
+		browserSync.init({
+			server: {
+				baseDir: "app"
+			}
+		});
+
+ 	Then we save the file, and from cmd line let's take our 'gulp.task('watch')' for a spin.
+ 	So from cmd line type in: 
+ 	$ gulp watch
+		[17:20:32] Using gulpfile ~\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site\gulpfile.js
+		[17:20:32] Starting 'watch'...
+		[17:20:32] Finished 'watch' after 45 ms
+		[BS] Access URLs:
+		 -------------------------------------
+		       Local: http://localhost:3000
+		    External: http://192.168.56.1:3000
+		 -------------------------------------
+		          UI: http://localhost:3001
+		 UI External: http://192.168.56.1:3001
+		 -------------------------------------
+		[BS] Serving files from: app
+
+
+ 	Well browserSycn spins up a web server, and automatically opens up our web browser and points towards that server. 
+ 	So now let's configure it to Auto-refresh the browser
+ 	Then Ctrl + C to tell Browser-sync to stop running the server, and go back to our 'gulpfile.js'
+
+		//gulp.start('html'); // html is the name of the Task we want to Start.
+		//whenever we make changes to our HTML file we want a reload
+
+ 	watch('./app/index.html', function() {
+		browserSync.reload()
+	} );
+
+	Now let's rerun the gulp watch in command line, Browser-sync reloads properly
+	But now let's make a change to our HTML file. And we notice that browserSync updates the page with whatever changes
+	we make...like adding 2 exclamation marks to our Title for instance.
+	Now we want browserSync to update by itself when we touch our CSS.
+	browserSync has a very neat feature for that....so let's create a brand new task in our 'gulpfile.js' file
+
+	// Creating a brand new task that we name cssInject
+	// And we want that task to take the contents of our compiled CSS file
+	// And we want to hand it over to browserSync so it can inject those styles into the page on the fly
+	
+	gulp.task('cssInject', function() {
+	// telling gulp.source where our CSS file lives
+	return gulp.src('./app/temp/styles/styles.css')
+		// and we pipe it into browserSync with the stream() method
+		.pipe(browserSync.stream());
+		// and because that line of Code starts with gulp.src which a Asynchronous function
+		// let's make sure to begin with return 
+});
+
+    Now the question is when should we run this cssInject Task? Well in our 'gulp.task(watch..,)' we have this one 
+
+    // Let's create a new WATCH Task for that CSS folder 
+	// ** is a Hypothetical Folder with an Hypothetical file with a css extension = *.css
+	watch('./app/assets/styles/**/*.css', function() {
+		gulp.start('styles');
+
+	that triggers whenever we Save changes to any CSS file, so we rename it to Trigger the cssInject task instead, and we have built 'gulp.task(cssInject)' a certain way that it won't even start if the former ['styles'] task begins and complete as a Dependency!
+
+
+	watch('./app/assets/styles/**/*.css', function() {
+		gulp.start('cssInject');
+
+FINAL CODE:
+===========
+	// Renaming 'styles' to trigger 'cssInject'
+	watch('./app/assets/styles/**/*.css', function() {
+		gulp.start('cssInject');
+	} );
+
+	});
+	// Creating a brand new task that we name cssInject
+	// And we want that task to take the contents of our compiled CSS file
+	// And we want to hand it over to browserSync so it can inject those styles into the page on the fly
+	// Adding 'styles' as a Dependency of cssInject
+	gulp.task('cssInject', ['styles'] function() {
+		// telling gulp.source where our CSS file lives
+		return gulp.src('./app/temp/styles/styles.css')
+			// and we pipe it into browserSync with the stream() method
+			.pipe(browserSync.stream());
+			// and because that line of Code starts with gulp.src which a Asynchronous function
+			// let's make sure to begin with return 
+	});
+
+Now let's fire up a new instance of 'gulp watch' in our cmd line
+Now no matter what we save in CSS file, is updated on the fly, like the change of a font-size for instance.
+
+Note:
+=====
+That black box popping up each we run cssInject, can be removed with one line of code in 'gulpfile.js'
+Just add in browserSync. init, the following line:
+
+browserSync.init({
+		notify: false,
+		server: {
+			baseDir: "app"
+		}
+	});
+
+What is Browsersync? What else can It do?
+==========================================
+By copying the URL in a different browser, we can CrossBrowser in Sync with Chrome, and Firefox at the same time.
+
+Another super cool feature of Browser-sync is this one when we run 'gulp watch', we see the following text in the cmd line. 
+The first line is the URL we see in the browser bar
+The second is, if we have a mobile device or a tablet that is using the same WiFi connection, we can then type this URL in our smartphone browser and preview our project website. Mobile testing becomes super Simple.
+
+ -------------------------------------
+       Local: http://localhost:3000
+    External: http://192.168.56.1:3000
+ -------------------------------------
+          UI: http://localhost:3001
+ UI External: http://192.168.56.1:3001
+ -------------------------------------
+
+
+
+
+
+
+
+
+
+
+

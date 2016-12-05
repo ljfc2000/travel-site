@@ -1,0 +1,73 @@
+Overview
+********
+Our 'large-hero' block is now complete, so now let's start styling that 'Intro' area underneath. Let's take a look at the Design file...Ok where do we begin?
+So let's work our way down from the Top to the bottom.
+The first thing that we notice is that White Space between 'large-hero' block and the Text 'The first trip...etc'
+and if we look in the browser, we see that this white space does not exist yet. To Create that vertical white spacing, that we want, our first instinct would be to add either a bottom-margin to 'large-hero' block, or to add Top-margin to that 'The first....' heading. But before doing anything, we should ask ourselves a question?
+Is Wanting a vertical spacing between sections of the page unique to that Area of contents? Or is that a design pattern that we can reuse throughout the entire page? If we scroll down the Design File, we notice 2 other areas when vertical spacing seems to be required.
+So to create vertical spacing, let's create a new block. 
+
+Creating a new Block
+====================
+Back in our editor, in our 'modules' folder, let's create a new file and name it '_page-section.css'.
+Then we create a class '.page-section', and if we look at the Design file, this new class will have the responsibility of adding Top padding and bottom padding for each section on the page.
+So let's try this: 
+
+	.page-section {
+		padding: 4.5rem 0;         <--- 4.5rem will be used for Top and Bottom padding, and 0 for horizontal 
+	}                                   left and right paddings        
+
+Let's save this file and make sure to open our main CSS file in 'styles/styles.css', and import that new 'page-section' module: 
+
+	@import "modules/_page-section";
+
+And now we can use our new '.page-section' class in our HTML. So back in our 'index.html'file, let's scroll down and we see that there is already a <div> that is wrapped around all of the contents that start from Text "This first trip...etc" and ends right before "Our Features" section begins, so this is the perfect <div> to add our 'page-section' class to:
+
+	<div id="our-beginning" class="page-section">
+
+Let's save this, and check it out in the browser. And now have our Vertical padding.
+
+Next thing that we need to address is that Text that is pushing to the left edge of the page. Earlier in our journey we've already created a block named 'wrapper' that could help us out here, so in our HTML let's create an inner <div> and give it the class of 'wrapper':
+
+	<div id="our-beginning" class="page-section">
+		<div class="wrapper">
+
+Let's save this file and take a look in the browser. We can see that the Text content is no longer Flushed against the left edge. Obviously, this is Ok for Mobile-view, and we need to take a step further for larger screens.
+If we look at our Design File, we notice that throughout the design, there seems to be a max-width of about 1200px, so back in the browser, we don't want the Text or image contents to be as wide as the screen. Because if we had a super large monitor, and if the window was Maximized, it would result in Text lines way too long for the Human eye to comfortably read. 
+So let's do this, within our CSS, in the '_wrapper.css' file, let's add a 'max-width: 1200px;' to create that max-width we wanted. But now we also want it horizontally centered in the screen, so let's add 2 things:
+margin-left and margin-right set to auto:
+
+	.wrapper {
+	padding-left: 18px;
+	padding-right: 18px;
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+There we have it. Ok we are supposed to be focussing on that Intro area but really quickly let's think a minute about what's worth our energy and efforts to think of our Design in terms of Reusable blocks and Repetable design patterns. 
+So if we look at the Design File and scroll down a bit to the 'Our Features' section, and watch how far we can get by styling this section by simply reusing existing blocks.
+So let's find the correspondent contents in our HTML, and we can see that there is already a <div> with an id="features", so let's give that <div> the class="page-section":
+
+	<div id="features" class="page-section">
+Back in the browser, we see that this new class added the vertical padding above and below 'Our Features' section.
+
+Next, let's give that section a Blue background, so back in our HTML, let's give that class, a modifier class named
+'page-section--blue':
+
+	<div id="features" class="page-section page-section--blue">
+
+Then in our '_page-section.css' file, let's create a new rule targeting that 'blue modifier' class and make the Text white:
+
+	&--blue {
+		background-color: $mainBlue;
+		color: #FFF;
+	}
+
+So now in the browser, we have full width blue background section, just like the Design File, and we can now use the 'wrapper' class to limit the contents to that 1200px, instead of using the full screen.
+Back in our HTML, let's create a new inner <div> and give it a class of 'wrapper', save the file. In the browser we have now centered the contents.
+
+	<div id="features" class="page-section page-section--blue">
+    <div class="wrapper">
+
+Now we can say that we have a pretty good idea, on how to use resuable blocks, and repeatable patterns.

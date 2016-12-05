@@ -1,0 +1,123 @@
+Questions:
+==========
+
+Are all of these tools necessary? Why are we not writing HTML, CSS, and JavaScript yet? 
+Why can't we just get started building the actual website?
+
+Answer:
+=======
+
+While we build our site we want:
+	-Automation: that takes a task and find a way to have your computer to make it AUTOMATIC for you. Like Auto-refresh
+	or CSS Auto-prefixer
+	-Organization:
+	Let's begin with CSS Organization, for instance we don't want to store ALL of our CSS code in one huge Single File, instead
+	we want to stay organized and have our CSS in multiple byte size files like:
+		-header.css
+		-footer.css
+		-banner.css
+		-features.css
+	We don't want to either store Tons of links rel="stylesheet" Files in our <head> section, and that can be Automated, and as soon as a change occurs, the computer can combine and update all those files, in One single file.
+
+Another thing that we need to talk about is:
+
+Package Management:
+===================
+What is Package Management? Building a website you've probably used:
+	jQuery
+	Bootstrap
+	Normalize.css
+What do those 3 things have in common? They are Packages that someone else maintains. So Instead of googling, downloading all those 3 different Files, there gotta be a better way, an Automated way to have access to them...and indeed there is, and it is called:
+	-Package Management
+
+What is Node.js?
+================
+The first question actually is what is JavaScript? JavaScript is traditionally a programming language that runs in the Web Browser, which means that JS can only do Web-browser'ish (Front-end) tasks like:
+	-Opening a Modal Window or lightbox
+	or
+	-Opening / Closing a Toggle menu
+	or
+	-Adding content to a page without a browser refresh
+
+But what about Computer'ish or Server'ish Tasks (Back-end tasks) like:
+	-Accessing the computer's File System
+	or
+	-Interacting directly with a Database
+	or
+	-Triggering a Server for sending emails
+
+To do those things we would need other languages like: 
+	-PHP
+	-Ruby
+	or 
+	-Python
+
+And JavaScript can't do that, so that's where Node.js comes into the Picture. 
+
+Ways to use Node:
+=================
+Camp #1                               Camp #2
+Install Node.js on a server           Install Node.js on our personal computer
+									  as our personal assistant to Automate 
+									  lots of tasks.
+
+installing Node:
+================
+Go to https://nodejs.org/en/
+We want to Download the most stable version of Node --> Pick up the LTS version
+Then from the command line type in: 
+~ node -v
+v6.9.1
+As long as you see the version #, you're in Buisiness.
+
+Node Hands-On:
+==============
+Go to your Projects Folder and create a new Directory and name it "node-experiment" and navigate to it. We want to write some code in a new test.js file and have Node runs that file and open it in your editor or in vim (save with :wq)
+then from cmd line type in: 
+
+~ node test.js
+and we should see the correct Output.
+
+Now let's create a little program that creates a new .html file for us inside that same folder. Like any other languages
+Node has access to various modules, so let's create a variable, requiring the "fs" module, then ask that file variable to write something for us. That var takes 2 arguments ("where file is created/nameOfTheFile", "contentsOfTheFile") so let's type in our file:
+
+var filesYo = require('fs');
+filesYo.writeFile(__dirname + "/index.html", "<h1>HTML Rocks!</h1>");
+
+And run it for a Spin with:
+~ node test.js
+And open it up in the browser with:
+~ start index.html
+
+Let's now write a program that pulls out an image from the Internet, to our hard drive. So let's get the URL of an Image on the Internet like:
+https://wallpaperscraft.com/image/amanda_seyfried_blonde_hair_gray_eyes_face_long_hair_nice_28919_2560x1600.jpg
+
+Then in our test.js, let's create a new variable in which we'll paste the URL: 
+
+var girlURL = "https://wallpaperscraft.com/image/		amanda_seyfried_blonde_hair_gray_eyes_face_long_hair_nice_28919_2560x1600.jpg";
+
+Then a var where the file will be saved on our computer:
+
+var girlFile = filesYo.createWriteStream(__dirname + "/node-girl.jpg");
+
+Next we want to write the Code that goes on the Internet and grabs the Pic; For that we need another Module and create a new variable:
+
+var https = require('https');
+
+Then we need to request that Picture with a new variable with 2 args (girlUrl, "what we want the get() 
+																	function to actually do with the content of that URL);
+var girlFile = filesYo.createWriteStream(__dirname + "/node-girl.jpg");
+By Creating an Anonymous function and pass it the response, and within this Anonymous function, we want to save the data that lives at the URL address, in a new file "node-girl.jpg" that lives on Our Computer.
+
+var request = https.get(girlURL, function(response) {
+	response.pipe(girlFile);
+});
+
+Then we run our file in the cmd line:
+
+~ node test.js
+
+And we should get our new file in that same Directory.
+
+
+

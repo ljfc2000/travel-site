@@ -1,0 +1,213 @@
+Node Package Manager : NPM
+==========================
+1. what is NPM? What is package management? Why would we use it?
+*****************************************************************
+NPM can be seen as Grocery Store, that contains Code instead of Food. Like for a recipe we would need ingredients to bake a cake, in development in order to perform a few tasks, we would need a few packages from NPM like: 
+-jQuery
+-Picturefill
+-Auto compile CSS
+-Auto concat JS
+
+NPM is a centralized place where developers share their Code with the World. By Sharing the Code, we create a better work, and we Avoid reinventing the Wheel.
+So what is package management? Is like creating a Grocery list, and giving that list to your personal Robot Assistant, that will go get (or fetch) all those ingredients for you at once.
+Like Food that can Expire, Code can become outdated or contain bugs, so with package management our Robot with a simple command, can automatically update and grab fresh copies of all our ingredients.
+
+2. What types of files/packages do we hope to find on NPM?
+**********************************************************
+Most packages in NPM fall into one of 2 types of Categories:
+	A/ Node packages
+	Packages of code allowing us to do things with Node like:
+	-Automation
+	-Build Tools
+	-Server tasks
+
+	B/ Packages that have nothing to do with Node like:
+	-jQuery
+	-Lodash
+	-Bootstrap
+	-Normalize.css
+	These are JavaScript and CSS packages that we need for our application to run in our Web browser.
+
+	Bottom line, NPM is bigger than just Node, NPM is our one Stop Shop for everything that we need.
+
+3. Hands-on demo. 
+******************
+Open the command line
+Navigate to our travel-site folder that contains our starter files and that we pushed up to Github
+We know that we will need jQuery to build our Site
+So let's use NPM to download that first ingredient, therefore in cmd line type in:
+
+~ npm install jquery
+
+And now inside of our travel-site folder, we will see a new folder named "node_modules" with jQuery in it.
+It's that simple to use NPM to download a package, however, there's an exta step that we should perform to 
+stay organized. (We delete that node_modules folder)
+Let's see a better way to install jQuery:
+-1 Let's create our grocery list for our project
+-2 In cmd line type in: 
+~ npm init
+
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg> --save` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+name: (travel-site)
+
+and press enter several times to accept the default setup until the process completes. 
+When that's done we will see inside of our travel-site folder, this new file named "package.json"
+This file is our project "Grocery or Recipe List"
+This file keeps track of all our packages that our Project uses. You want to create that 'package.json' file for 
+each of our project or for each of our Git repos.
+
+3-Let's open it in our editor
+It contains all the general info about our Project that the computer generated automatically, we could
+actually delete all of these lines except name, and version, and save those changes. (MAKE SURE TO DELETE LAST COMA)
+
+{
+  "name": "travel-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ljfc2000/travel-site.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ljfc2000/travel-site/issues"
+  },
+  "homepage": "https://github.com/ljfc2000/travel-site#readme"
+}
+
+The reason why this file is so great, is because we can keep track of which packages we're using.
+So back in the cmd line let's download "jQuery" again with the following command, with a bit of extra text "--save"
+
+~ npm install jquery --save
+
+Press enter
+Output:
+*******
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git_Dev/Projects/travel-site (master)
+$ npm install jquery --save
+travel-site@1.0.0 C:\Users\pc\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site
+`-- jquery@3.1.1
+
+npm WARN travel-site@1.0.0 No description
+npm WARN travel-site@1.0.0 No repository field.
+npm WARN travel-site@1.0.0 No license field.
+
+4-Like before that will create a "node_modules" Folder, but more importantly, if we open "package.json" in our editor
+we see that this new "dependencies" area was created automatically with "jquery" included.
+By adding the "--save" to our command, saved the package installed to our recipe File. 
+
+{
+  "name": "travel-site",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}
+
+5-Let's install another package: 
+
+~ npm install normalize.css --save
+
+Output:
+*******
+lucpc@LukePC MINGW64 ~/Desktop/WebDev_Brad/Git_Dev/Projects/travel-site (master)
+$ npm install normalize.css --save
+travel-site@1.0.0 C:\Users\pc\Desktop\WebDev_Brad\Git_Dev\Projects\travel-site
+`-- normalize.css@5.0.0
+
+npm WARN travel-site@1.0.0 No description
+npm WARN travel-site@1.0.0 No repository field.
+npm WARN travel-site@1.0.0 No license field.
+
+and normalize.css is automatically added to our grocery list:
+
+{
+  "name": "travel-site",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "normalize.css": "^5.0.0"
+  }
+}
+
+NOTE:
+*****
+If we delete "node_modules" folder that contains "jquery and normalize.css" , because we still have that "package.json"
+File with all the packages we wanted, we would just have to type in our command line:
+
+~ npm install 
+
+to Get the "node_modules" folder back in our project. Bottom line when using npm install command, it's looking for that
+"package.json" file, and installs whatever that is on that file recipe.
+
+QUESTIONS:
+*********
+1. How do we know the exact name of packages to install?
+Go to the NPM website : https://www.npmjs.com/
+Now you can search and browse for packages, or you can even google what you want to achieve with a package including "npm"
+at the end of your search string.
+
+2. How do we actually use the packages JS & CSS files?
+We usually leave the files where there are, but we import them to our code. (and we will see that later on)
+
+3. Why are the new package files not tracked by Git?
+Let's run the command :
+
+~ git status
+
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        package.json
+
+nothing added to commit but untracked files present (use "git add" to track)
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+And we see that the only file that has changed according to Git is "package.json" file, but we know that we 
+added a bunch of new files into the "node_modules" folder. 
+Why is Git not tracking those files? 
+We can find out by opening up our "travel-site" folder itself into our Text editor, and we will see an hidden
+file ".gitignore" and within that file we can tell Git to ignore certain types of Files that are not important.
+
+For example:
+ on line 17 we can see:
+
+Thumbs.db this is a file generated by the Windows OS for any folder that contains images, so this is a random file that has nothing to do with our project.
+ 
+ on line 18 we have: 
+
+ .DS_Store this is a system file that Mac creates and we don't need that in our repo, that has nothing to do with our project either.
+
+ on line 12 we see: 
+
+ node_modules/ which means that we have configured our Git repo to completely Ignore the "node_modules" Folder.
+ And why in earth do we do that? We do that because it's what we call a BEST PRACTICE
+ As long as we have the "package.json" file listing all the packages that we need, there is no sense to Feed the Git repo
+ with all those package files. The only thing that matters, is that "package.json" file that we can use with 
+ npm install command in case of our computer would blow up.
+
+
+
+
+
+
+
+
+

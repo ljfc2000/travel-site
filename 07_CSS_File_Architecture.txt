@@ -1,0 +1,121 @@
+File Architecture
+*****************
+First off Open up a new window in your Web browser and then from your 'travel-site' Folder, Drag and Drop the index.html file inside of it.
+This is our Starter page. The Goal as Web Developer is to Assemble all those HTML elements in a certain Way by using CSS code.
+Let's open our main CSS file 'styles', and let's begin with some Global CSS that we want to Cascade down to every element on the page.
+- Let's target the 'body' element with a global font-family called 'Roboto', and a 'sans-serif' as a fall back if the first one was not be available.
+- And set the Default text color to a Dark Gray #333
+- Next Open up the index.html file to add our CSS link to the 'head' section of the page. 
+- So right before the end of the 'head' section let's add our StyleSheet
+- And which file do we want to point to? Remember that we created a temp folder inside our 'app' folder, and this is where 	PostCSS generates and Outputs the final CSS that we want to Use in our Website.
+-Save your html file and open up the cmd line, and navigate to 'travel-site folder'
+-And fire up 'gulp watch', and head back to our Main CSS file and Save it again to Trigger the Gulp Build
+ that way the temp/styles/styles.css will be updated automatically with our newest CSS code.
+-Now let's open the browser and refresh to see what the body looks like, the 'Roboto' font is active, with a dark grey color
+-We can also see that, the 1st Picture is so large, that it forcing the browser to scroll horizontally...which is not good! Let's write a Global CSS rule to fix that.
+-By targeting all image elements with a max-width of 100% and a height to auto; refresh browser and take a look
+-Ok that's fixed; what do we want to work on Next? Let's take a look at the design file that the designer sent to us
+-Our next step is to take a Unique part of this Design, and begin building it.
+-Let's Skip the Top header Navigation bar for now, and chose the banner area with the Text we want to laid on Top, as the 1st thing we will build. Back in the browser we can see the image, and underneath the text that we want to sit on Top of the image.
+-Let's take a look at that section in our html file
+-If we scroll down a bit, we see that text in a <div> with a class of 'large-hero', so let's write some CSS that targets that class and will turn that raw data into the final product
+
+-In our main CSS file we could write at the bottom some code like .large-hero{}, but if we think about the key concept of this course, we wanted to pay attention to File Architecture, which means that we don't want to dump all of our CSS in the same file.
+-So in the \travel-site\app\assets\styles folder we want to create a new folder named 'modules'
+-And inside that new modules folder, let's create a new file named '_large-hero.css'
+-The underscore indicates to other Developers, that the file is a partial file, meaning that we won't use this file as itself, but instead will import this file to some other CSS file.
+-So if we add a bit of CSS to that file: 
+	.large-hero {
+		position: relative;
+	}
+how do we import it to our Main Style sheet? We use a special syntax in our Main 'styles.css' file:
+	@import "modules/_large-hero";     (No need for .css extension)
+
+It's important to point out that @import is a native CSS feature but we don't want the web browser to download multiples CSS files, instead we want Gulp and PostCSS to see this @import line and actually replace this line with the contents of this '_large-hero' file.
+And for that, we can easily set up PostCSS to Do that.
+
+-Back in the command line, Ctrl+C to tell Gulp to stop watching, and we want to install a PostCSS package
+-Type in : npm install postcss-import --save-dev
+-That might take a moment, then in our 'gulpfile.js' we want to import that new package with require() method and add the cssImport package to our gulp.task array:
+
+gulp.task('styles', function() {
+	return gulp.src('./app/assets/styles/styles.css')
+		.pipe(postcss([cssImport, cssvars, nested, autoprefixer]))
+		.pipe(gulp.dest('./app/temp/styles'));
+});
+
+-Back in the cmd line let's fire up 'gulp watch', and go back to our Main 'styles.css' file, and move our @import at the very Top of our file, and Save the File
+-Let's make sure that the @import worked! Open up the css file from the 'temp' folder and see if the @import was converted properly. Gulp has replaced the @import line with the contents of '_large-hero' file.
+
+-Back in our Main CSS file, why don't we take things one step further and move our two Global rules into their own file dedicated to Global rules?
+-Copy those 2 Global rules, and place them in a brand new folder sitting next to the 'modules' folder
+-And name that new folder 'base' and then let's create a new file named '_global.css', and paste the Global rules inside
+-Then back in our Main 'styles' CSS file, remains our 1st @import
+-Now let's import '_global' into it :
+	@import "base/_global";
+
+-Our main 'styles.css' file does not contain any CSS itself, instead this file is like a Recipe containing other Ingredients, Ingredients that have their own Focussed Purpose.
+This would let us keep our Code super organized.
+
+-Earlier we installed a very popular PostCSS pacakage named 'normalize.css', it should be listed in our 'package.json' file, and should live in our 'node_modules' folder
+
+-Let's import it like this in our Main 'styles.css' file like this : @import "normalize.css"; and Save
+-Now if we check the 'styles.css' from our 'temp' folder normalize library should appear as execpeted thanks to Gulp we have imported the entire normalize library into our 'styles.css' file;
+At the very bottom we can see our code from '_large-hero' and '_global'
+
+-Now let's close this file and go back to the browser, and before refreshing let's take a look at the main image, where we see those white tiny margins that we can see on the left and right sides. After refreshing they should be gone.
+-This is the Automatic reset from 'normalize.css' that makes some elements render in browsers more consistantly
+
+
+
+Indentify patterns in Design
+*****************************
+We want to write CSS for the following part of the design: The Image, the Banner with Text on Top of it, and if we jump back to our Editor, we created a file for that specific purpose '_large-hero.css'.
+So the first thing that we want to do, is locating the text underneath that image, and sit it on Top of it, so let's go back to our index.html file and look for that 'class=large-hero' area. The image can stay where it is, but if we want to position the text inside headers, and paragraph Tags, we want to wrap those elements inside of their own unique <div> Tag in order to position that <div> as one whole element, instead of positionning those elements individually. 
+
+So let's create a <div> sandwish and give it a class name that we will be able to target in our CSS:
+	<div class="large-hero__text_content">
+
+then let's save this file and go back to our CSS file, with that new class. We want to write CSS that sits that Text on Top of that image.
+
+if we said for instance :
+
+.large-hero__text_content {
+	position : absolute;
+	top: 0;
+	left: 0;
+}
+That would position the Text in the Top left corner of the Image. But we want that text to be centered both horizontally & Vertically.
+Centering horizontally is done like this --> width: 100%;
+											 text-align: center;	
+
+Centering Vertically is                  -->              .large-hero__text_content {
+bit Trickier. By changing the Top                            position : absolute;  
+value to 50%, the top edge of our new                        top: 50%;
+<div> is centered but not its content                        transform: translateY(-50%);
+so we use another property named                             left: 0;
+transform: translateY(100%) pushes the                       width: 100%;
+content DOWN                                                 text-align: center;
+transform: translateY(0) is the neutral position          }
+so we use negative values in this case, to level
+it up a bit with translateY(-50%) and there we
+have it!																			
+															
+															
+Now that we have centered our Text properly, let's Focus on the Text Styling.	
+We See that 'Your Clarity' is a header level 1, so to target that element we would probably write something like that to make that element NOT BOLD, and that selector is Working properly.
+
+	.large-hero h1 {
+		font-weight: 300;
+	}														
+															
+However nowadays there is a Move away,  things have changed a bit, using and writing CSS with generic "type and descendent selector" like the one above has been replaced by a more systematic way of targeting elements.	
+One of the most popular methodoly is called : BEM	
+
+
+
+
+
+
+
+
